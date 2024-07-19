@@ -1,0 +1,328 @@
+{
+    "alupco": {
+        "fixed": {
+            "path": "/tools/alupco-glb-original/FIXED-SYS-DIVIDER.glb",
+            "name": "ALUPCO ROYAL SLIDING SYSTEM FIXED",
+            "type": "glb",
+            "system": "fixed",
+            "image": "/icons/TRNSBG_0007_FIXED-ROYAL.png",
+            "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+            "price": 0
+        },
+        "sliding": {
+            "2T": {
+                "2S": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS.glb",
+                    "type": "glb",
+                    "system": "2T-2S",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS",
+                    "image": "/icons/TRNSBG_0006_SLIDING-ROYAL-2-TRACK-2-PANELS.png",
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "price": 0
+                },
+                "3S": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-3-PANELS.glb",
+                    "type": "glb",
+                    "system": "2T-3S",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 3 PANELS",
+                    "image": "/icons/TRNSBG_0005_SLIDING-ROYAL-2-TRACK-3-PANELS.png",
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "price": 0
+                },
+                "4S": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-4-PANELS.glb",
+                    "type": "glb",
+                    "system": "2T-4S",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 4 PANELS",
+                    "image": "/icons/TRNSBG_0004_SLIDING-ROYAL-2-TRACK-4-PANELS.png",
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "price": 0
+                }
+            },
+            "3T": {
+                "3S": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-3-TRACK-3-PANELS.glb",
+                    "type": "glb",
+                    "system": "3T-3S",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 3 TRACK 3 PANELS",
+                    "image": "/icons/TRNSBG_0003_SLIDING-ROYAL-3-TRACK-3-PANELS.png",
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "price": 0
+                },
+                "6S": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-3-TRACK-6-PANELS.glb",
+                    "type": "glb",
+                    "system": "3T-6S",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 3 TRACK 6 PANELS",
+                    "image": "/icons/TRNSBG_0002_SLIDING-ROYAL-3-TRACK-6-PANELS.png",
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "price": 0
+                }
+            },
+            "4T": {
+                "4S": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-4-TRACK-4-PANELS.glb",
+                    "type": "glb",
+                    "system": "3T-3S",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 4 TRACK 4 PANELS",
+                    "image": "/icons/TRNSBG_0001_SLIDING-ROYAL-4-TRACK-4-PANELS.png",
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "price": 0
+                },
+                "8S": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-4-TRACK-8-PANELS.glb",
+                    "type": "glb",
+                    "system": "3T-6S",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 4 TRACK 8 PANELS",
+                    "image": "/icons/TRNSBG_0000_SLIDING-ROYAL-4-TRACK-8-PANELS.png",
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "price": 0
+                }
+            }
+        },
+        "sliding-with-fixed": {
+            "2T": {
+                "2S-FAT": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-ARCH-TOP.glb",
+                    "type": "glb",
+                    "system": "2T-2S-FAT",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS WITH FIXED ARCH TOP",
+                    "image": "/icons/_0000_SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-ARCH-TOP.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+                "2S-FBTS": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-BOTTOM-W-1-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-FBTS",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS WITH FIXED BOTTOM WITH 1 TSEC",
+                    "image": "/icons/_0001_SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-BOTTOM-W-1-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 1
+                },
+
+                "2S-FB": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-BOTTOM-WITHOUT-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-FB",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS WITH FIXED BOTTOM WITHOUT TSEC",
+                    "image": "/icons/_0002_SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-BOTTOM-WITHOUT-TSEC-.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+
+                "2S-FL": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-LEFT-WITHOUT-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-FL",
+                    "name": "ALUPCO ROYAL SLIDING SYSTEM 2T 2S WITH FIXED LEFT WITHOUT TSEC",
+                    "image": "/icons/_0003_SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-LEFT-WITHOUT-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+
+                "2S-FR": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-RIGHT-WITHOUT-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-FR",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS WITH FIXED RIGHT WITHOUT TSEC",
+                    "image": "/icons/_0004_SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-RIGHT-WITHOUT-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+
+                "2S-FTTS": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-TOP-W-1-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-FTTS",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS WITH FIXED TOP W 1 TSEC",
+                    "image": "/icons/_0000_SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-TOP-W-1-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 1
+                },
+
+                "2S-FT": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-TOP-WITHOUT-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-FTTS",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS WITH FIXED TOP WITHOUT TSEC",
+                    "image": "/icons/_0001_SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-TOP-WITHOUT-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+
+                "3SFBTS": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-3-PANELS-W-FIXED-BOTTOM-W-2-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-3SFBTS",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 3 PANELS WITH FIXED BOTTOM WITH 2 TSEC",
+                    "image": "/icons/_0005_SLIDING-ROYAL-2-TRACK-3-PANELS-W-FIXED-BOTTOM-W-2-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 2
+                },
+
+                "3SFB": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-3-PANELS-W-FIXED-BOTTOM-WITHOUT-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-3SFB",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 3 PANELS WITH FIXED BOTTOM WITHOUT TSEC",
+                    "image": "/icons/_0006_SLIDING-ROYAL-2-TRACK-3-PANELS-W-FIXED-BOTTOM-WITHOUT-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+
+                "3SFTTS": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-3-PANELS-W-FIXED-TOP-W-2-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-3SFTTS",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 3 PANELS WITH FIXED TOP WITH 2 TSEC",
+                    "image": "/icons/_0002_SLIDING-ROYAL-2-TRACK-3-PANELS-W-FIXED-TOP-W-2-TSEC-RENDER.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 2
+                },
+
+                "3SFT": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-2-PANELS-W-FIXED-TOP-WITHOUT-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-3SFTTS",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 2 PANELS WITH FIXED TOP WITHOUT TSEC",
+                    "image": "/icons/_0003_SLIDING-ROYAL-2-TRACK-3-PANELS-W-FIXED-TOP-WITHOUT-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+
+                "4SFTTS1": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-4-PANELS-W-FIXED-TOP-W-1-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-4SFTTS1",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 4 PANELS WITH FIXED TOP WITH 1-TSEC",
+                    "image": "/icons/_0004_SLIDING-ROYAL-2-TRACK-4-PANELS-W-FIXED-TOP-W-1-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 1
+                },
+
+                "4SFTTS3": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-2-TRACK-4-PANELS-W-FIXED-TOP-W-3-TSEC.glb",
+                    "type": "glb",
+                    "system": "2T-2S-4SFTTS3",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 2 TRACK 4 PANELS WITH FIXED TOP WITH 3 TSEC",
+                    "image": "/icons/_0005_SLIDING-ROYAL-2-TRACK-4-PANELS-W-FIXED-TOP-W-3-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 3
+                }
+            },
+
+            "3T": {
+                "3S-FTTS2": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-3-TRACK-3-PANELS-W-FIXED-TOP-W-2-TSEC.glb",
+                    "type": "glb",
+                    "system": "6S-FTTS2",
+                    "name": "ALUPCO ROYAL SLIDING-ROYAL 3 TRACK 3 PANELS WITH FIXED TOP WITH 2 TSEC",
+                    "image": "/icons/_0006_SLIDING-ROYAL-3-TRACK-3-PANELS-W-FIXED-TOP-W-2-TSEC-RENDER.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 2
+                },
+                
+                "3S-FT": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-3-TRACK-3-PANELS-W-FIXED-TOP-WITHOUT-TSEC.glb",
+                    "type": "glb",
+                    "system": "6S-FT",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 3 TRACK 3 PANELS WITH FIXED TOP WITHOUT TSEC",
+                    "image": "/icons/_0000_SLIDING-ROYAL-3-TRACK-3-PANELS-W-FIXED-TOP-WITHOUT-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 0
+                },
+
+                "6S-FTTS1": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-3-TRACK-6-PANELS-W-FIXED-TOP-W-1-TSEC.glb",
+                    "type": "glb",
+                    "system": "6S-FTTS1",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 3 TRACK 6 PANELS WITH FIXED TOP WITH 1 TSEC",
+                    "image": "/icons/_0001_SLIDING-ROYAL-3-TRACK-6-PANELS-W-FIXED-TOP-W-1-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 1
+                },
+
+                "6S-FTTS5": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-3-TRACK-6-PANELS-W-FIXED-TOP-W-5-TSEC.glb",
+                    "type": "glb",
+                    "system": "6S-FTTS1",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 3 TRACK 6 PANELS WITH FIXED TOP WITH 5 TSEC",
+                    "image": "/icons/_0002_SLIDING-ROYAL-3-TRACK-6-PANELS-W-FIXED-TOP-W-5-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 5
+                }
+            },
+
+            "4T": {
+                "4S-FTTS1": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-4-TRACK-4-PANELS-W-FIXED-TOP-W-1-TSEC.glb",
+                    "type": "glb",
+                    "system": "4S-FTTS1",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 4 TRACK 4 PANELS WITH FIXED TOP WITH 1 TSEC",
+                    "image": "/icons/_0003_SLIDING-ROYAL-4-TRACK-4-PANELS-W-FIXED-TOP-W-1-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 1
+                },
+
+                "4S-FTTS3": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-4-TRACK-4-PANELS-W-FIXED-TOP-W-3-TSEC.glb",
+                    "type": "glb",
+                    "system": "4S-FTTS3",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 4 TRACK 4 PANELS WITH FIXED TOP WITH 3 TSEC",
+                    "image": "/icons/_0004_SLIDING-ROYAL-4-TRACK-4-PANELS-W-FIXED-TOP-W-3-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 3
+                },
+
+                "8S-FTTS1": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-4-TRACK-8-PANELS-W-FIXED-TOP-W-1-TSEC.glb",
+                    "type": "glb",
+                    "system": "8S-FTTS1",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 4 TRACK 8 PANELS WITH FIXED TOP WITH 1 TSEC",
+                    "image": "/icons/_0000_SLIDING-ROYAL-4-TRACK-8-PANELS-W-FIXED-TOP-W-1-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 1
+                },
+
+                "8S-FTTS7": {
+                    "path": "/tools/alupco-glb-original/SLIDING-ROYAL-4-TRACK-8-PANELS-W-FIXED-TOP-W-7-TSEC.glb",
+                    "type": "glb",
+                    "system": "8S-FTTS7",
+                    "name": "ALUPCO ROYAL SLIDING ROYAL 4 TRACK 8 PANELS WITH FIXED TOP WITH 7 TSEC",
+                    "image": "/icons/_0001_SLIDING-ROYAL-4-TRACK-8-PANELS-W-FIXED-TOP-W-7-TSEC.PNG.png",
+                    "price": 0,
+                    "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+                    "TSEC": 7
+                }
+            }
+        },
+        "panel": {
+            "path": "/tools/alupco-glb-original/panel/2t border.glb",
+            "type": "glb",
+            "system": "panel",
+            "2d": "/tools/alupco-image/SLD-ROYAL-2T-2S.svg",
+            "price": 0
+        }
+    }
+}

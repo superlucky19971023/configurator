@@ -1,0 +1,132 @@
+#blyd3d-canvas-container {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    max-height: 100vh;
+    /* overflow: hidden; */
+}
+
+.blyd3d-hide {
+    display: none !important;
+}
+
+.blyd3d-modal-panel, .blyd3d-modal-panel-item, .blyd3d-modal-panel-item-type {
+    position: absolute;
+    background-color: #fff;
+    height: 80vh;
+    width: 80vw;
+    top: calc((100% - 80vh) / 2);
+    left: calc((100% - 80vw) / 2);
+    z-index: 99;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #dedddd;
+    box-shadow: 0px 0px 20px 3px #3f3c3c;
+}
+
+.blyd3d-modal-panel-item-type {
+    z-index: 100;
+}
+
+.blyd3d-right-bloc {
+    width: 200px;
+    border-left: 1px solid #c5c5cc;
+    padding-top: 2em;
+}
+
+.blyd3d-left-bloc {
+    width: calc(100% - 200px);
+}
+
+#blyd3d-grid-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.blyd3d-right-bloc label {
+    height: max-content;
+    width: max-content;
+}
+
+.blyd3d-right-bloc input[type="radio"] {
+    display: none;
+}
+
+.blyd3d-step-btn button {
+    padding: .3em .5em;
+    border-radius: .2em;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    font-size: 15px;
+}
+
+.blyd3d-step-btn, .blyd3d-second-step {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 1em;
+}
+
+.blyd3d-step-btn button:hover {
+    background-color: #797979;
+    color: #fff;
+    cursor: pointer;
+}
+
+.blyd3d-step-btn button[disabled=""]:hover {
+    cursor:not-allowed;
+    background-color: #fff;
+    color: #000;
+}
+
+.blyd3d-right-bloc img{
+    height: 50px;
+}
+
+.blyd3d-modal-panel-item .blyd3d-left-bloc, .blyd3d-modal-panel-item-type .blyd3d-left-bloc {
+    height: max-content;
+    overflow: auto;
+    max-height: 98%;
+}
+
+.blyd3d-modal-panel-item .blyd3d-left-bloc img, .blyd3d-modal-panel-item-type .blyd3d-left-bloc img{
+    height: 100px;
+    width: max-content;
+}
+
+.blyd3d-item-sub-element {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.blyd3d-left-bloc {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 15px;
+    overflow: auto;
+}
+
+.blyd3d-left-bloc div[data-name] {
+    pointer-events: auto;
+    width: 200px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+.caption {
+    position: absolute;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px 5px;
+    border-radius: 3px;
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+  }
