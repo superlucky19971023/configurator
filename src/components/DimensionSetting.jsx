@@ -4,7 +4,8 @@ const DimensionSetting = (props) => {
   const [borderCheck, setBorderCheck] = useState(false)
 
     const handleCheckChange = (e) => {
-        console.log(e.target.value)
+      console.log(e.target.checked)
+        setBorderCheck(e.target.checked)
     }
 
   return (
@@ -33,7 +34,7 @@ const DimensionSetting = (props) => {
         </div>
         <div className="px-4 py-2 flex items-center gap-2">
           <label for="borderCheck">Use border : </label>
-          <input onChange={handleCheckChange} className="border-[2px] rounded-md w-5 h-5" type="checkbox" id="borderCheck" name="borderCheck" defaultValue={false} />
+          <input onClick={handleCheckChange} className="border-[2px] rounded-md w-5 h-5" type="checkbox" id="borderCheck" name="borderCheck" defaultValue={false} />
         </div>
       </div>
       {borderCheck && (
