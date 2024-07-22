@@ -30,8 +30,8 @@ const CustomCard = ({ options, onSelect, onClick = null }) => {
               className="object-cover px-1 w-full rounded-xl h-60 md:h-auto md:w-14 md:rounded-xl"
             />
           )}
-          <div class="flex flex-col justify-between p-4 leading-normal">
-            <h5 class="mb-3 font-semibold text-gray-700 dark:text-gray-400">{option.name}</h5>
+          <div className="flex flex-col justify-between p-4 leading-normal">
+            <h5 className="mb-3 font-semibold text-gray-700 dark:text-gray-400">{option.name}</h5>
           </div>
           {/* {option.price && <p>{option.price}$</p>} */}
         </div>
