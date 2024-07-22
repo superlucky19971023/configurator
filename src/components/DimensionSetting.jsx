@@ -10,7 +10,7 @@ const DimensionSetting = (props) => {
 
   return (
     <div className="p-2 space-y-4">
-      <h1 className=" text-xl font-bold mb-2">{props.selectedItem ? props.selectedItem.name : ''}</h1>
+      <h1 className=" text-xl font-bold mb-2">SLIDING 2D + FIX ON TOP</h1>
       <div className=" text-[16px] border-[2px] font-bold flex flex-col gap-2 py-4">
         <div className="px-4 py-2">
           <label for="width">Width(mm) : </label>
