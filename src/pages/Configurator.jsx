@@ -10,6 +10,8 @@ import { SelectedItemContext } from '../components/SelectedItemContext'
 import { HexColorPicker } from 'react-colorful'
 import ColorPicker from 'react-pick-color'
 import { useSelector, useDispatch } from 'react-redux'
+import CustomCard from '../components/CustomCard'
+import ColorSelect from '../components/ColorSelect'
 // import { ColorPicker } from 'react-colorful';
 
 const fixeDoorLeftHandimage = '/icons/fixe-window-left-hand.png'
@@ -24,7 +26,23 @@ export default function Configurator() {
   const { modalFormIsSubmit, checkIfModalFormIsSubmit } = useContext(SelectedItemContext)
   const dispatch = useDispatch()
 
-  const { modelSize,mainURL,handleURL,profile,aluminumType,aluminumColor,openingType,glazing,glassColor,glassOpacity,glassRoughness } = useSelector((state) => state.model)
+  const { modelSize, mainURL, handleURL, profile, aluminumType, openingType, glazing, glassColor, glassOpacity, glassRoughness } =
+    useSelector((state) => state.model)
+
+  const colors = [
+    '#FF5733', // Vibrant Orange
+    '#33FF57', // Lime Green
+    '#5733FF', // Deep Purple
+    '#33C7FF', // Sky Blue
+    '#FF33A1', // Pink
+    '#FFD700', // Gold
+    '#8A2BE2', // Blue Violet
+    '#FF4500', // Orange Red
+    '#2E8B57', // Sea Green
+    '#FF6347' // Tomato
+  ]
+
+  const black = '#000000'
 
   const nextStep = () => {
     setSlideDirection('next')
@@ -49,7 +67,7 @@ export default function Configurator() {
 
   const displayItemModal = () => {
     document.querySelector('.blyd3d-modal-panel-item').classList.remove('blyd3d-hide')
-    checkIfModalFormIsSubmit(false)
+    checkIfModalFormIsSubmit(true)
   }
 
   // Front Layout
@@ -348,26 +366,25 @@ export default function Configurator() {
         </div>
       </div>
 
-      <div className="blyd3d-modal-panel-item">
-        <DisplayItem />
-        <div className="blyd3d-right-bloc">
-          <div className="blyd3d-step-btn">
-            <button
-              id="blyd3d-cancel-item"
-              onClick={() => {
-                checkIfModalFormIsSubmit(false)
-              }}>
-              Cancel
-            </button>
-            <button
-              id="blyd3d-display-item"
-              onClick={() => {
-                checkIfModalFormIsSubmit(true)
-              }}>
-              Done
-            </button>
-          </div>
-        </div>
+      <div className="blyd3d-modal-panel-item blyd3d-hide">
+        <DisplayItem modelCheck={checkIfModalFormIsSubmit} />
+        {/* <div className="flex h-fit">
+          <button
+            className="px-4 py-1 rounded-lg border-[1px] text-white bg-red-800  hover:opacity-40 active:opacity-80"
+            onClick={() => {
+              checkIfModalFormIsSubmit(false)
+            }}>
+            Cancel
+          </button>
+          <button
+            id="blyd3d-display-item"
+            className="px-4 py-1 rounded-lg border-[1px] text-white bg-blue-800 hover:opacity-40 active:opacity-80"
+            onClick={() => {
+              checkIfModalFormIsSubmit(true)
+            }}>
+            Done
+          </button>
+        </div> */}
       </div>
 
       <div className="blyd3d-modal-panel blyd3d-hide">
@@ -424,43 +441,93 @@ export default function Configurator() {
         </div>
       </div>
       <section className="lg:w-[480px] w-full shadow-xl flex flex-col lg:overflow-hidden overflow-auto">
-        <div className="flex justify-between p-2">
+        {/* <div className="flex justify-between p-2">
           <h1>Sales Portal Logo</h1>
           <div>
             <h4 className=" text-xs uppercase">Total</h4>
             <h1 className=" font-bold text-xl">0</h1>
           </div>
-        </div>
+        </div> */}
         <div
-          className={`h-full bg-white overflow-y-scroll ${
+          className={`h-full bg-white p-5 py-8 overflow-y-auto ${
             slideDirection === 'next' ? 'slide-content-animation-next' : slideDirection === 'prev' ? 'slide-content-animation-prev' : ''
           }`}>
           {currentStep === 1 && (
-            <div className="p-2">
-              <h1 className=" text-xl font-bold mb-2">{selectedItem ? selectedItem.name : ''}</h1>
-              <button className="border-2 rounded p-3 text-xs relative hover:border-blue-800 cursor-pointer " onClick={displayItemModal}>
-                View Models
-              </button>
-              <div className="mb-3">
-                <h3 className="font-semibold mb-1">Would you like to create a custom grill?</h3>
-                <div>
-                  <button
-                    className="border-2 rounded p-3 text-xs relative hover:border-blue-800 cursor-pointer "
-                    onClick={displayGridModal}>
-                    Draw yours
-                  </button>
-                </div>
-                {/* <CustomSelect options={BuildingHeightOptions} onSelect={handleBuildingHeightOption}  /> */}
-              </div>
+            <div>
+              <div className="p-8 space-y-8">
+                <a
+                  href="#"
+                  class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="object-cover px-1 w-full rounded-t-lg h-60 md:h-auto md:w-10 md:rounded-none md:rounded-s-lg">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
+                    />
+                  </svg>
 
-              {modalFormIsSubmit && selectedItem && typeof selectedItem.TSEC !== 'undefined' ? (
-                <div className="mb-3">
-                  <h3 className="font-semibold mb-1">Connections Options</h3>
-                  <CustomSelect options={FrontLayoutOptions} onSelect={handleFrontLayoutOption} />
-                </div>
-              ) : (
-                ''
-              )}
+                  <div class="flex flex-col justify-between p-4 leading-normal" onClick={displayItemModal}>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Products Library</h5>
+                  </div>
+                </a>
+              </div>
+              <div className="p-8 space-y-8">
+                <a
+                  href="#"
+                  class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  {/* <img
+                    class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-20 md:rounded-none md:rounded-s-lg"
+                    src="/materials/wooden.png"
+                    alt=""
+                  /> */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="object-cover px-1 w-full rounded-t-lg h-60 md:h-auto md:w-10 md:rounded-none md:rounded-s-lg">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                    />
+                  </svg>
+
+                  <div class="flex flex-col justify-between p-4 leading-normal" onClick={displayItemModal}>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">My Favourite List</h5>
+                  </div>
+                </a>
+              </div>
+              <div className="p-8 space-y-8">
+                <a
+                  href="#"
+                  class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="object-cover px-1 w-full rounded-t-lg h-60 md:h-auto md:w-10 md:rounded-none md:rounded-s-lg">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"
+                    />
+                  </svg>
+
+                  <div class="flex flex-col justify-between p-4 leading-normal" onClick={displayGridModal}>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Draw yours</h5>
+                  </div>
+                </a>
+              </div>
             </div>
           )}
           {currentStep === 2 && (
@@ -474,7 +541,7 @@ export default function Configurator() {
                     type="text"
                     id="width"
                     name="width"
-                    defaultValue={parseFloat(modelSize.width).toFixed(2)}
+                    defaultValue={parseFloat(modelSize.width).toFixed(3) * 1000}
                   />
                 </div>
                 <div className="px-4 py-2">
@@ -484,7 +551,29 @@ export default function Configurator() {
                     type="text"
                     id="width"
                     name="width"
-                    defaultValue={parseFloat(modelSize.height).toFixed(2)}
+                    defaultValue={parseFloat(modelSize.height).toFixed(3) * 1000}
+                  />
+                </div>
+              </div>
+              <div className=" text-[16px] border-[2px] font-bold flex flex-col gap-2 py-4">
+                <div className="px-4 py-2">
+                  <label for="width">Width : </label>
+                  <input
+                    className="border-[2px] rounded-md p-1"
+                    type="text"
+                    id="width"
+                    name="width"
+                    defaultValue={parseFloat(modelSize.width).toFixed(3) * 1000}
+                  />
+                </div>
+                <div className="px-4 py-2">
+                  <label for="width">Height: </label>
+                  <input
+                    className="border-[2px] rounded-md p-1"
+                    type="text"
+                    id="width"
+                    name="width"
+                    defaultValue={parseFloat(modelSize.height).toFixed(3) * 1000}
                   />
                 </div>
               </div>
@@ -493,48 +582,45 @@ export default function Configurator() {
 
           {/* Etape 2 */}
           {currentStep === 3 && (
-            <div className="p-2 relative">
-              {/* Modal */}
-
-              {isModalOpen && (
-                <div className="absolute h-full overflow-y-scroll top-0 left-0 right-0 bottom-0  bg-white z-10  justify-center items-center">
-                  <div className="bg-white p-4 rounded-lg">
-                    <button
-                      onClick={closeModal}
-                      className={`bg-gray-200 mb-4 rounded-full py-2 px-4 text-center text-xs uppercase flex items-center cursor-pointer hover:bg-black hover:text-white`}>
-                      <span>
-                        {' '}
-                        <X />
-                      </span>
-                      <span className="w-full px-4">Next</span>
-                    </button>
-                    <div className="grid grid-cols-2 gap-2">
-                      {windowsOption.map((option, index) => (
-                        <div
-                          key={index}
-                          className={`border-2 rounded p-3 text-xs relative hover:border-blue-800 cursor-pointer ${
-                            selectedOption === option ? 'border-blue-800' : ''
-                          }`}
-                          onClick={() => handleSelectWindow(index)}>
-                          {selectedOption === option && (
-                            <div className="absolute top-0 right-0 px-[2px] bg-blue-800 rounded-bl-lg text-white">
-                              <Check className="w-4" />
-                            </div>
-                          )}
-                          {option.image && <img src={option.image} alt="" className="w-full mb-2" />}
-                          <p className="mb-2 font-semibold">{option.name}</p>
-                          {option.price && <p>{option.price}$</p>}
-                        </div>
-                      ))}
+            <div className="p-2 space-y-4">
+              <h1 className=" text-xl font-bold mb-2">Windows & Doors</h1>
+              <div className="">
+                <h3 className="font-semibold mb-1 py-5">Profile Option</h3>
+                {/* <p className="text-xs mb-1">SetProfile</p> */}
+                {/* <CustomSelect options={ProfileOptions} onSelect={handleProfileOption} /> */}
+                <div className="flex flex-col space-y-2">
+                  <div className="flex gap-2">
+                    <div className="text-[12px] font-semibold">Component:</div>
+                    <div className="text-[12px]">316.Sliding Window ELV</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="text-[12px] font-semibold">Description:</div>
+                    <div className="text-[12px]">
+                      Profile: Royal 120 - Sliding Window - 7016 SAHARA-Glass: 24mm Tempered ( 6mm HD+ Grey + 12mm Spacer + 6mm Clear
+                      )-Sliding Flyscreen-Outside Installation Without Archtrive
                     </div>
                   </div>
+                  <div className="flex gap-2">
+                    <div className="text-[12px] font-semibold">Quantity:</div>
+                    <div className="text-[12px]">1 pcs</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="text-[12px] font-semibold">Size:</div>
+                    <div className="text-[12px]">730.0 mm x 3,010.0 mm</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="text-[12px] font-semibold">Glass Surface:</div>
+                    <div className="text-[12px]">1.712 sqm</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="text-[12px] font-semibold">Surface:</div>
+                    <div className="text-[12px]">2.197 sqm</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="text-[12px] font-semibold">Opening type:</div>
+                    <div className="text-[12px]">Fixed</div>
+                  </div>
                 </div>
-              )}
-              <h1 className=" text-xl font-bold mb-2">Windows & Doors</h1>
-              <div className="mb-3">
-                <h3 className=" font-semibold mb-1">Profile Option</h3>
-                <p className=" text-xs mb-1">SetProfile</p>
-                <CustomSelect options={ProfileOptions} onSelect={handleProfileOption} />
               </div>
             </div>
           )}
@@ -543,12 +629,13 @@ export default function Configurator() {
               <h1 className=" text-xl font-bold mb-2">Aluminium Colour</h1>
               <div className="mb-3">
                 <h3 className=" font-semibold mb-1">Material</h3>
-                <CustomSelect options={MaterialOptions} onSelect={handleSetMaterial} />
+                <CustomCard options={MaterialOptions} onSelect={handleSetMaterial} />
               </div>
               <div className="mb-3">
-                <h3 className=" font-semibold mb-1">Set Aluminium Colour</h3>
+                <h3 className=" font-semibold mb-1">Select Colour</h3>
+                <ColorSelect colorCodes={colors} flag="frame" />
 
-                <ColorPicker
+                {/* <ColorPicker
                   color={selectedCladding?.color}
                   onChange={(color) => {
                     console.log(color)
@@ -559,7 +646,7 @@ export default function Configurator() {
                       color: color.hex
                     }))
                   }}
-                />
+                /> */}
               </div>
             </div>
           )}
@@ -583,31 +670,37 @@ export default function Configurator() {
                 </div>
                 <div className="border-[2px] p-2 rounded-md flex flex-col space-y-4">
                   <h3 className=" font-semibold mb-1">Glass Options</h3>
-                  <div className="">
+                  {/* <div className="">
                     <p className=" text-xs mb-1">Choose roughness</p>
-                    <input className="w-full" type="range" min="0" max="1" step="0.01" defaultValue="0.7" onChange={(e)=>{
-                      dispatch({ type: 'SET_GLASS_ROUGHNESS', payload: e.target.value })
-                    }}/>
+                    <input
+                      className="w-full"
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      defaultValue="0.7"
+                      onChange={(e) => {
+                        dispatch({ type: 'SET_GLASS_ROUGHNESS', payload: e.target.value })
+                      }}
+                    />
                   </div>
                   <div className="">
                     <p className=" text-xs mb-1">Choose transparency</p>
-                    <input className="w-full" type="range" min="0" max="1" step="0.01" defaultValue="0.4" onChange={(e)=>{
-                      dispatch({ type: 'SET_GLASS_OPACITY', payload: e.target.value })
-                    }}/>
-                  </div>
-                  <div className="">
-                    <p className=" text-xs mb-1">Choose color</p>
-                    <ColorPicker
-                      color={selectedCladding?.color}
-                      onChange={(color) => {
-                        // Update the color property of the selected cladding option
-                        dispatch({ type: 'SET_GLASS_COLOR', payload: color.hex })
-                        setSelectedCladding((prevOption) => ({
-                          ...prevOption,
-                          color: color.hex
-                        }))
+                    <input
+                      className="w-full"
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      defaultValue="0.4"
+                      onChange={(e) => {
+                        dispatch({ type: 'SET_GLASS_OPACITY', payload: e.target.value })
                       }}
                     />
+                  </div> */}
+                  <div className="">
+                    <p className=" text-xs mb-1">Choose color</p>
+                    <ColorSelect colorCodes={colors} flag="glass" />
                   </div>
                 </div>
               </div>

@@ -197,7 +197,7 @@ const BLYD3D = ({ selector }) => {
 
           texture.needsUpdate = true
 
-          console.log(aluminumColor)
+          // console.log(aluminumColor)
           scene.current.traverse((object) => {
             if (object.isMesh && !object.material.name.includes('HANDL') && !object.material.name.includes('GLZ')) {
               // UnwrapUVs(object.geometry);
@@ -217,7 +217,7 @@ const BLYD3D = ({ selector }) => {
         }
       )
     } else if (aluminumType.includes('Anodized')) {
-      console.log('anodized')
+      // console.log('anodized')
       loader.load(
         '/materials/silver.png',
         function (texture) {
@@ -245,7 +245,7 @@ const BLYD3D = ({ selector }) => {
         }
       )
     } else {
-      console.log('wooden')
+      // console.log('wooden')
       loader.load(
         '/materials/wooden.png',
         function (texture) {
@@ -285,11 +285,16 @@ const BLYD3D = ({ selector }) => {
           handleURL,
           function (gltf) {
             object.geometry = gltf.scene.children[0].geometry
+            object.material = gltf.scene.children[0].material
           },
           function (error) {
             console.log('An error happened')
           }
         )
+      } else if (object.isMesh && object.name.includes('BRDR')) {
+        // Load the GLB model
+        // console.log(object.name)
+        console.log(scene.current.remove(object))
       }
     })
   }, [handleURL])
@@ -320,7 +325,7 @@ const BLYD3D = ({ selector }) => {
       drawFixedSlideWindowGrid(item[itemId])
 
       dispatch({ type: 'SET_MAIN_URL', payload: item[itemId].path })
-      console.log(item[itemId].path)
+      // console.log(item[itemId].path)
 
       document.querySelector('.blyd3d-modal-panel-item').classList.add('blyd3d-hide')
     })
@@ -930,11 +935,11 @@ const BLYD3D = ({ selector }) => {
             // const worldPosition = new THREE.Vector3();
             // lastClicked.getWorldPosition(worldPosition);
             // console.log('World Position of Object', worldPosition);
-
             var caption = document.getElementById('caption')
+            // console.log(child.name)
             // caption.id = 'myNewDiv';
             // caption.className = 'caption';
-            caption.textContent = child.material.name
+            caption.textContent = child.name
             // document.getElementById('mainView').appendChild(caption);
 
             const vector = new THREE.Vector3()
@@ -1047,7 +1052,7 @@ const BLYD3D = ({ selector }) => {
 
   const adaptOnView = (object) => {
     const objBoundingBox = new THREE.Box3().setFromObject(object)
-    camera.current.position.z = Math.max(objBoundingBox.max.y - objBoundingBox.min.y, objBoundingBox.max.x - objBoundingBox.min.x)
+    camera.current.position.z = Math.max(objBoundingBox.max.y - objBoundingBox.min.y, objBoundingBox.max.x - objBoundingBox.min.x)+1
   }
 
   function getFileExtension(url) {
@@ -1204,8 +1209,8 @@ const BLYD3D = ({ selector }) => {
     svg.setAttribute('width', canvasSelector.current.offsetWidth)
     svg.setAttribute('height', canvasSelector.current.offsetHeight)
     const lines = [
-      { start: box.min.clone(), end: new THREE.Vector3(box.max.x, box.min.y, box.min.z), text: `Width: ${size.x.toFixed(2)}` },
-      { start: box.min.clone(), end: new THREE.Vector3(box.min.x, box.max.y, box.min.z), text: `Height: ${size.y.toFixed(2)}` }
+      { start: box.min.clone(), end: new THREE.Vector3(box.max.x, box.min.y, box.min.z), text: `Width: ${size.x.toFixed(3)*1000}` },
+      { start: box.min.clone(), end: new THREE.Vector3(box.min.x, box.max.y, box.min.z), text: `Height: ${size.y.toFixed(3)*1000}` }
     ]
     lines.forEach((line) => {
       const startScreen = projectToScreen(line.start)
@@ -1230,7 +1235,7 @@ const BLYD3D = ({ selector }) => {
   function projectToScreen(vector) {
     const widthHalf = 0.5 * canvasSelector.current.offsetWidth
     const heightHalf = 0.5 * canvasSelector.current.offsetHeight
-    console.log(widthHalf, heightHalf)
+    // console.log(widthHalf, heightHalf)
     const projected = vector.clone().project(camera.current)
     return {
       x: projected.x * widthHalf + widthHalf,
