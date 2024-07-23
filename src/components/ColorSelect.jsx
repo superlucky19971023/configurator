@@ -17,12 +17,12 @@ const ColorSelect = (props) => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-4">
       {colorCodes.map((colorCode, idx) => (
         <div
-          className={`w-[50px] h-[50px] rounded-full border-[4px] shadow-sm ${idx == current ? 'border-blue-800' : ''}`}
+          className={`w-full h-[30px] border-[2px] shadow-sm ${idx == current ? 'border-blue-800' : ''}`}
           style={{ backgroundColor: colorCode }}
-          onClick={() => handleSelectColor(idx)}></div>
+          onClick={() => handleSelectColor(idx)}>Ral Color</div>
       ))}
     </div>
   )

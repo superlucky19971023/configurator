@@ -40,7 +40,8 @@ const BLYD3D = ({ selector }) => {
     currentObj = useRef([]),
     savedModel = useRef([]),
     canvasSelector = useRef(null),
-    isInit = useRef(false)
+    isInit = useRef(false),
+    mixer = useRef(null)
 
   const animate = useCallback(() => {
     requestAnimationFrame(animate)
@@ -60,7 +61,8 @@ const BLYD3D = ({ selector }) => {
     glazing,
     glassColor,
     glassOpacity,
-    glassRoughness
+    glassRoughness,
+    border
   } = useSelector((state) => state.model)
 
   /**
@@ -291,13 +293,17 @@ const BLYD3D = ({ selector }) => {
             console.log('An error happened')
           }
         )
-      } else if (object.isMesh && object.name.includes('BRDR')) {
-        // Load the GLB model
-        // console.log(object.name)
-        console.log(scene.current.remove(object))
       }
     })
   }, [handleURL])
+
+  useEffect(() => {
+    scene.current.traverse((object) => {
+      if (object.isMesh && object.name.includes('BRDR')) {
+        object.visible = border
+      }
+    })
+  }, [border])
 
   useEffect(() => {
     scene.current.traverse((object) => {
@@ -355,12 +361,9 @@ const BLYD3D = ({ selector }) => {
     })
   }
 
-  // Fonction pour effectuer le rendu de la scène
   const render = () => {
-    // Effectuer le rendu de la scène
     renderer.current.render(scene.current, camera.current)
-    // Répéter le rendu à chaque image
-    requestAnimationFrame(render) // Effectuer le rendu de la scène
+    requestAnimationFrame(render)
   }
 
   // Fonction pour ajouter des lumières à la scène
@@ -631,7 +634,8 @@ const BLYD3D = ({ selector }) => {
 
     selectObjectOnClick(grid)
 
-    dispatch({ type: 'SET_MODEL_SIZE', payload: getObjSize(scene.current) })
+    dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: getObjSize(scene.current).width })
+    dispatch({ type: 'SET_MODEL_SIZE_HEIGHT', payload: getObjSize(scene.current).height })
     render()
   }
 
@@ -916,18 +920,23 @@ const BLYD3D = ({ selector }) => {
     function mapChild(obj) {
       obj.traverse(function (child) {
         if (child instanceof THREE.Mesh) {
+          var popup = document.getElementById('popup')
+          var caption = document.getElementById('caption')
+
           child.userData.onClick = function () {
             // Restaurer la texture de l'élément précédemment cliqué
             if (lastClicked) {
               scene.current.traverse((object) => {
-                if (object.isMesh && object.name.includes(lastClicked.name)) {
+                if (object.isMesh && object.name.includes(lastClicked.name) && lastClicked.name.includes('ANNO-FIXED')) {
+                  object.scale.set(1, 1, 1)
+                  popup.classList.add('hidden')
                   // console.log(object)
-                  object.material = lastClicked.savedMaterial
+                  // object.material = lastClicked.savedMaterial
                 }
               })
-              lastClicked.material = lastClicked.savedMaterial
+              // lastClicked.material = lastClicked.savedMaterial
             }
-
+           
             // Stocker les informations sur l'élément actuellement cliqué
             lastClicked = child
             lastClicked.savedMaterial = child.material.clone()
@@ -935,7 +944,7 @@ const BLYD3D = ({ selector }) => {
             // const worldPosition = new THREE.Vector3();
             // lastClicked.getWorldPosition(worldPosition);
             // console.log('World Position of Object', worldPosition);
-            var caption = document.getElementById('caption')
+
             // console.log(child.name)
             // caption.id = 'myNewDiv';
             // caption.className = 'caption';
@@ -957,12 +966,22 @@ const BLYD3D = ({ selector }) => {
             // console.log(spritey)
             // scene.current.add(spritey);
 
-            // scene.current.traverse((object) => {
-            //   if (object.isMesh && object.name.includes(child.name)) {
-            //     // console.log(object)
-            //     object.material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0cc9ff') })
-            //   }
-            // })
+            scene.current.traverse((object) => {
+              if (object.isMesh && object.name.includes(child.name) && child.name.includes('ANNO-FIXED')) {
+                object.scale.set(1.5, 1.5, 1.5)
+                popup.classList.remove('hidden')
+                const vector = new THREE.Vector3()
+                vector.setFromMatrixPosition(lastClicked.matrixWorld)
+                vector.project(camera.current)
+
+                const x = (vector.x * 0.5 + 0.5) * window.innerWidth - 100
+                const y = (vector.y * -0.5 + 0.5) * window.innerHeight
+
+                popup.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`
+                // console.log(object)
+                // object.material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0cc9ff') })
+              }
+            })
 
             // console.log(child.name)
             // Appliquer la nouvelle texture à l'élément cliqué
@@ -1035,13 +1054,20 @@ const BLYD3D = ({ selector }) => {
       scene.current.add(model)
       currentObj.current.push(model)
 
-      dispatch({ type: 'SET_MODEL_SIZE', payload: getObjSize(scene.current) })
+      dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: getObjSize(scene.current).width })
+      dispatch({ type: 'SET_MODEL_SIZE_HEIGHT', payload: getObjSize(scene.current).height })
 
       const size = objBoundingBox
       model.position.y -= size.max.y / 2
       model.position.x += size.max.x / 2
       size.getCenter(center)
       model.position.copy(center).negate()
+
+      scene.current.traverse((object) => {
+        if (object.isMesh && object.name.includes('BRDR')) {
+          object.visible = false
+        }
+      })
 
       adaptOnView(model)
       render()
@@ -1052,7 +1078,7 @@ const BLYD3D = ({ selector }) => {
 
   const adaptOnView = (object) => {
     const objBoundingBox = new THREE.Box3().setFromObject(object)
-    camera.current.position.z = Math.max(objBoundingBox.max.y - objBoundingBox.min.y, objBoundingBox.max.x - objBoundingBox.min.x)+1
+    camera.current.position.z = Math.max(objBoundingBox.max.y - objBoundingBox.min.y, objBoundingBox.max.x - objBoundingBox.min.x) + 1
   }
 
   function getFileExtension(url) {
@@ -1209,8 +1235,8 @@ const BLYD3D = ({ selector }) => {
     svg.setAttribute('width', canvasSelector.current.offsetWidth)
     svg.setAttribute('height', canvasSelector.current.offsetHeight)
     const lines = [
-      { start: box.min.clone(), end: new THREE.Vector3(box.max.x, box.min.y, box.min.z), text: `Width: ${size.x.toFixed(3)*1000}` },
-      { start: box.min.clone(), end: new THREE.Vector3(box.min.x, box.max.y, box.min.z), text: `Height: ${size.y.toFixed(3)*1000}` }
+      { start: box.min.clone(), end: new THREE.Vector3(box.max.x, box.min.y, box.min.z), text: `Width: ${size.x.toFixed(3) * 1000}` },
+      { start: box.min.clone(), end: new THREE.Vector3(box.min.x, box.max.y, box.min.z), text: `Height: ${size.y.toFixed(3) * 1000}` }
     ]
     lines.forEach((line) => {
       const startScreen = projectToScreen(line.start)
@@ -1254,7 +1280,13 @@ const BLYD3D = ({ selector }) => {
 
   return (
     <div id="mainView">
-      <div id="svgContainer" style={{ position: 'absolute' }}></div>
+      <div id="popup" className="flex flex-col w-52 absolute hidden">
+        <div className="p-1 border-[2px] cursor-pointer bg-gray-500">Opening Types</div>
+        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">OPEN IN</div>
+        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">OPEN OUT</div>
+        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">SLIDER</div>
+        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">FIXED</div>
+      </div>
       <div id="caption" className="caption"></div>
       <div ref={canvasSelector} />
     </div>

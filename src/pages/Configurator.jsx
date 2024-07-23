@@ -28,7 +28,7 @@ export default function Configurator() {
   const { modalFormIsSubmit, checkIfModalFormIsSubmit } = useContext(SelectedItemContext)
   const dispatch = useDispatch()
 
-  const { modelSize, mainURL, handleURL, profile, aluminumType, openingType, glazing, glassColor, glassOpacity, glassRoughness } =
+  const { modelWidthSize,modelHeightSize, mainURL, handleURL, profile, aluminumType, openingType, glazing, glassColor, glassOpacity, glassRoughness } =
     useSelector((state) => state.model)
 
   const colors = [
@@ -459,7 +459,7 @@ export default function Configurator() {
               <div className="w-full p-4 space-y-4">
                 <a
                   href="#"
-                  className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-black hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -474,15 +474,15 @@ export default function Configurator() {
                     />
                   </svg>
 
-                  <div className="flex flex-col justify-between p-4 leading-normal" onClick={displayItemModal}>
-                    <h5 className="mb-2 text-[20px] font-bold tracking-tight text-gray-900 dark:text-white">Products Library</h5>
+                  <div className="flex flex-col justify-between p-4 leading-normal hover:text-white" onClick={displayItemModal}>
+                    <h5 className="mb-2 text-[20px] font-bold tracking-tight ">Products Library</h5>
                   </div>
                 </a>
               </div>
               <div className="p-4 space-y-4">
                 <a
                   href="#"
-                  className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-black hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                   {/* <img
                     className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-20 md:rounded-none md:rounded-s-lg"
                     src="/materials/wooden.png"
@@ -502,15 +502,15 @@ export default function Configurator() {
                     />
                   </svg>
 
-                  <div className="flex flex-col justify-between p-4 leading-normal" onClick={displayItemModal}>
-                    <h5 className="mb-2 text-[20px] font-bold tracking-tight text-gray-900 dark:text-white">My Favourite List</h5>
+                  <div className="flex flex-col justify-between p-4 leading-normal hover:text-white" onClick={displayItemModal}>
+                    <h5 className="mb-2 text-[20px] font-bold tracking-tight">My Favourite List</h5>
                   </div>
                 </a>
               </div>
               <div className="p-4 space-y-4">
                 <a
                   href="#"
-                  className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-black hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -525,15 +525,15 @@ export default function Configurator() {
                     />
                   </svg>
 
-                  <div className="flex flex-col justify-between p-4 leading-normal" onClick={displayGridModal}>
-                    <h5 className="mb-2 text-[20px] font-bold tracking-tight text-gray-900 dark:text-white">Draw yours</h5>
+                  <div className="flex flex-col justify-between p-4 leading-normal hover:text-white" onClick={displayGridModal}>
+                    <h5 className="mb-2 text-[20px] font-bold tracking-tight">Draw yours</h5>
                   </div>
                 </a>
               </div>
             </div>
           )}
           {currentStep === 2 && (
-            <DimensionSetting modelSize={modelSize} selectedItem={selectedItem} />
+            <DimensionSetting modelWidthSize={modelWidthSize} modelHeightSize={modelHeightSize} selectedItem={selectedItem} />
           )}
 
           {/* Etape 2 */}
@@ -641,8 +641,8 @@ export default function Configurator() {
                 </div>
                 <div>
                   <h3 className="font-semibold">2. Window Size</h3>
-                  <p className="text-[12px]">width: {modelSize.width}</p>
-                  <p className="text-[12px]">height: {modelSize.height}</p>
+                  <p className="text-[12px]">width: {modelWidthSize}</p>
+                  <p className="text-[12px]">height: {modelHeightSize}</p>
                 </div>
                 <div>
                   <h3 className="font-semibold">3. Profile Option</h3>

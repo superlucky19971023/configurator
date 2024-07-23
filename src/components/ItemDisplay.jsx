@@ -38,7 +38,6 @@ const DisplayItem = (props) => {
   const handlePageClick = (pageNum) => {
     setCurrentPage(pageNum)
   }
-  console.log(options)
   return (
     <div className="p-4">
       <div className="text-center text-[24px] font-bold">Product List</div>

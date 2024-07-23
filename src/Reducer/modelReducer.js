@@ -11,8 +11,9 @@ const initialState = {
     glassOpacity:0.7,
     glassRoughness:0.3, 
     flyScreen:'',
-    modelSize:{},
-    
+    modelWidthSize:0,
+    modelHeightSize:0,
+    border:false,
   };
   
   const model = (state = initialState, action) => {
@@ -41,8 +42,12 @@ const initialState = {
         return { ...state, glassRoughness: action.payload };
       case 'SET_FLYSCREEN':
         return { ...state, flyScreen: action.payload };
-      case 'SET_MODEL_SIZE':
-        return { ...state, modelSize: action.payload };  
+      case 'SET_MODEL_SIZE_WIDTH':
+        return { ...state, modelWidthSize: action.payload };  
+      case 'SET_MODEL_SIZE_HEIGHT':
+        return { ...state, modelHeightSize: action.payload };  
+      case 'SET_BORDER':
+        return { ...state, border : action.payload };  
       default:
         return state;
     }
