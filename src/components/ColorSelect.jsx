@@ -1,11 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 
 const ColorSelect = (props) => {
   const dispatch = useDispatch()
   const [current, setCurrent] = useState(0)
   const aluminumColor = useSelector((state) => state.model.aluminumColor)
   const colorCodes = props.colorCodes
+
+  useEffect(()=>{
+    axios.get('http://tmf.erpestman.com:2000/AluminumColorsLists')
+    .then(response => {
+      // Handle the successful response
+      console.log(response.data);
+    })
+    .catch(error => {
+      // Handle the error
+      console.log(error);
+    });
+  },[])
 
   const handleSelectColor = (idx) => {
     if(props.flag.includes("glass")){
