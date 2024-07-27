@@ -17,8 +17,7 @@ import ProfileSetting from '../components/ProfileSetting'
 import GlazingSelect from '../components/GlazingSelect'
 import axios from 'axios'
 
-const fixeDoorLeftHandimage = '/icons/fixe-window-left-hand.png'
-const image = '/icons/door-left-hand.png'
+const image = '/_0004_SLIDING-ROYAL-4-TRACK-4-PANELS-W-FIXED-TOP-W-3-TSEC.PNG.png'
 
 export default function Configurator() {
   // Step Management
@@ -211,16 +210,6 @@ export default function Configurator() {
     setIsModalOpen(false)
   }
 
-  const windowsOption = [
-    { name: 'Empty Panel', image: image, price: 52 },
-    { name: 'Screen Window (600mm)', image: image, price: 52 },
-    { name: 'Screen Window (600mm)', image: image, price: 52 },
-    { name: 'Screen Window (600mm)', image: image, price: 52 },
-    { name: 'Screen Window (600mm)', image: image, price: 52 },
-    { name: 'Screen Window (600mm)', image: image, price: 52 },
-    { name: 'Screen Window (600mm)', image: image, price: 52 }
-  ]
-
   const handleSelectWindow = (index) => {
     // Sélection de l'option
     setSelectedOption(windowsOption[index])
@@ -361,7 +350,7 @@ export default function Configurator() {
             slideDirection === 'next' ? 'slide-content-animation-next' : slideDirection === 'prev' ? 'slide-content-animation-prev' : ''
           }`}>
           {currentStep === 1 && (
-            <div className="flex flex-col">
+            <div className="flex flex-col absolute pt-5 pl-4">
               <div className="w-full p-4 space-y-4">
                 <a
                   href="#"
@@ -498,12 +487,12 @@ export default function Configurator() {
                   </div>
                 </div>
               </div>
-              <h5 className="py-4">BorderOption YES/NO</h5>
-              <div>
+              <h5 className="py-4 mt-4 font-bold">BorderOption YES/NO</h5>
+              <div classsName="mt-4">
                 <a
                   href="#"
                   onClick={handleBorderTrue}
-                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
                     border ? '' : 'line-through'
                   }`}>
                   YES
@@ -511,11 +500,14 @@ export default function Configurator() {
                 <a
                   href="#"
                   onClick={handleBorderFalse}
-                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
                     border ? 'line-through' : ''
                   }`}>
                   NO
                 </a>
+              </div>
+              <div className="mt-10 w-full">
+                <img className="m-auto w-[200px] h-[200px] rounded-3xl" src="./icons/TRNSBG_0001_SLIDING-ROYAL-4-TRACK-4-PANELS.png" />
               </div>
             </div>
           )}
@@ -523,12 +515,31 @@ export default function Configurator() {
 
           {/* Etape 2 */}
           {currentStep === 3 && (
-            <div className="p-2">
+            <div className="p-2 h-full">
               <h1 className=" text-xl font-bold mb-2">Opening Type</h1>
               <div className="mb-3 py-6">
-                <div className="h-[400px] overflow-auto">
+                <div className="h-[600px] overflow-auto">
                   <CustomSelect options={OpeningTypeOptions} onSelect={handleOpeningType} />
                 </div>
+              </div>
+              <h5 className="py-4 mt-4 font-bold">Add FlyScreen? Yes/No</h5>
+              <div className="mt-4 ml-5">
+                <a
+                  href="#"
+                  onClick={handleBorderTrue}
+                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                    border ? '' : 'line-through'
+                  }`}>
+                  YES
+                </a>
+                <a
+                  href="#"
+                  onClick={handleBorderFalse}
+                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                    border ? 'line-through' : ''
+                  }`}>
+                  NO
+                </a>
               </div>
             </div>
           )}

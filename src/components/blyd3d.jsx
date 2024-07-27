@@ -368,31 +368,25 @@ const BLYD3D = ({ selector }) => {
 
   // Fonction pour ajouter des lumières à la scène
   const addLight = () => {
-    // Lumière ambiante
-    var light = new THREE.AmbientLight(0xffffff, 100)
+    var light = new THREE.AmbientLight(0x404040 , 100)
     scene.current.add(light)
 
-    // Lumière directionnelle de haut
     var lumiereHaut = new THREE.DirectionalLight(0xffffff, 100)
     lumiereHaut.position.set(0, 1, 0)
     scene.current.add(lumiereHaut)
 
-    // Lumière directionnelle de bas
     var lumiereBas = new THREE.DirectionalLight(0xffffff, 100)
     lumiereBas.position.set(0, -1, 0)
     scene.current.add(lumiereBas)
 
-    // Lumière directionnelle de gauche
     var lumiereGauche = new THREE.DirectionalLight(0xffffff, 100)
     lumiereGauche.position.set(-1, 0, 0)
     scene.current.add(lumiereGauche)
 
-    // Lumière directionnelle de droite
     var lumiereDroite = new THREE.DirectionalLight(0xffffff, 100)
     lumiereDroite.position.set(1, 0, 0)
     scene.current.add(lumiereDroite)
 
-    // Lumière de contre-jour
     var contreJour = new THREE.DirectionalLight(0xffffff, 100)
     contreJour.position.set(0, -1, -1)
     scene.current.add(contreJour)

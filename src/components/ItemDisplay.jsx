@@ -14,7 +14,7 @@ const DisplayItem = (props) => {
   const dispatch = useDispatch()
   useEffect(() =>{
     async function fetchData() {
-      const response = await axios.get('http://tmf.erpestman.com:2000/api/AluminumItemInsertionTypes', {
+      const response = await axios.get('http://tmf.erpestman.com:2000/api/AluminumItemInsertionTypes?page=1&pageSize=8', {
         headers: {
           'accept': 'text/plain'
         }
@@ -22,8 +22,7 @@ const DisplayItem = (props) => {
       console.log(response.data["$values"])
       setOptions(response.data["$values"])
     }
-    fetchData();
-    
+    fetchData();  
   },[])
 
 
@@ -84,7 +83,7 @@ const DisplayItem = (props) => {
             </div>
           ))}
         </div>
-        <div className="w-1/3 m-auto pagination-controls flex justify-between items-center">
+        <div className="w-1/3 pagination-controls flex justify-between items-center bottom-4 left-1/2 -translate-x-1/2 absolute">
           {/* <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-blue-800 text-white rounded disabled:opacity-50">
           Previous
         </button>
