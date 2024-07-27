@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Check, Plus, X } from 'lucide-react'
 import CustomSelect from '../components/Customselect'
 import StepProgressIndicator from '../components/StepProgressIndicator'
@@ -14,22 +14,59 @@ import CustomCard from '../components/CustomCard'
 import ColorSelect from '../components/ColorSelect'
 import DimensionSetting from '../components/DimensionSetting'
 import ProfileSetting from '../components/ProfileSetting'
-// import { ColorPicker } from 'react-colorful';
+import GlazingSelect from '../components/GlazingSelect'
+import axios from 'axios'
 
 const fixeDoorLeftHandimage = '/icons/fixe-window-left-hand.png'
 const image = '/icons/door-left-hand.png'
 
 export default function Configurator() {
   // Step Management
-  const [currentStep, setCurrentStep] = useState(1)
+
   const [displayGrid, setModalGridOpen] = useState(false)
   const [slideDirection, setSlideDirection] = useState(null)
   const { selectedItem } = useContext(SelectedItemContext)
   const { modalFormIsSubmit, checkIfModalFormIsSubmit } = useContext(SelectedItemContext)
   const dispatch = useDispatch()
 
-  const { modelWidthSize,modelHeightSize, mainURL, handleURL, profile, aluminumType, openingType, glazing, glassColor, glassOpacity, glassRoughness } =
-    useSelector((state) => state.model)
+  const {
+    modelWidthSize,
+    modelHeightSize,
+    mainURL,
+    handleURL,
+    profile,
+    aluminumType,
+    openingType,
+    glazing,
+    glassColor,
+    glassOpacity,
+    glassRoughness,
+    modalFlag,
+    currentStep,
+    border
+  } = useSelector((state) => state.model)
+
+  useEffect(() => {
+    if (currentStep === 3) {
+      async function fetchData() {
+        const response = await axios.get('http://tmf.erpestman.com:2000/api/AluminumItemOpeningTypes', {
+          headers: {
+            accept: 'text/plain'
+          }
+        })
+        const options = response.data['$values'].map((obj) => {
+          const update = { ...obj }
+          update['name'] = update['aluOpeningTypeDesc']
+          update['image'] = update['openingTypeImagePath']
+          delete update['aluOpeningTypeDesc']
+          delete update['openingTypeImagePath']
+          return update
+        })
+        setOpeningTypeOptions(options)
+      }
+      fetchData()
+    }
+  }, [currentStep])
 
   const colors = [
     '#FF5733', // Vibrant Orange
@@ -44,12 +81,10 @@ export default function Configurator() {
     '#FF6347' // Tomato
   ]
 
-  const black = '#000000'
-
   const nextStep = () => {
     setSlideDirection('next')
     setTimeout(() => {
-      setCurrentStep(currentStep + 1)
+      dispatch({ type: 'SET_CURRENT_STEP', payload: currentStep + 1 })
       setSlideDirection(null)
     }, 200) // Temps de l'animation en millisecondes
   }
@@ -57,7 +92,7 @@ export default function Configurator() {
   const prevStep = () => {
     setSlideDirection('prev')
     setTimeout(() => {
-      setCurrentStep(currentStep - 1)
+      dispatch({ type: 'SET_CURRENT_STEP', payload: currentStep - 1 })
       setSlideDirection(null)
     }, 200)
   }
@@ -72,85 +107,15 @@ export default function Configurator() {
     checkIfModalFormIsSubmit(true)
   }
 
-  // Front Layout
-
-  const [selectedFrontLayoutOption, setSelectedFrontLayoutOption] = useState(null)
-  let FrontLayoutOptions = []
-
-  if (typeof selectedItem !== 'undefined' && selectedItem != null && typeof selectedItem.TSEC !== 'undefined' && selectedItem.TSEC > 0) {
-    FrontLayoutOptions = []
-    for (let index = 0; index < selectedItem.TSEC; index++) {
-      FrontLayoutOptions.push({ name: (index + 1).toString() + ' connections' })
-    }
-  }
-  const handleFrontLayoutOption = (option) => {
-    setSelectedFrontLayoutOption(option)
+  const handleBorderTrue = () => {
+    dispatch({ type: 'SET_BORDER', payload: true })
   }
 
-  // Building Height
-
-  const [selectedBuildingHeight, setSelectedBuildingHeightOption] = useState()
-  const BuildingHeightOptions = [{ name: '2.5m Height', image: fixeDoorLeftHandimage, price: 0 }]
-  const handleBuildingHeightOption = (option) => {
-    setSelectedBuildingHeightOption(option)
+  const handleBorderFalse = () => {
+    dispatch({ type: 'SET_BORDER', payload: false })
   }
 
-  // Ground Screw Base
-
-  const [selectedGroundScrewBase, setSelectedGroundScrewBaseOption] = useState()
-  const GroundScrewBaseOptions = [
-    { name: 'Base Not Included - Customer to provide FLAT, LEVEL & SMOOTH concrete base', image: image, price: 0 },
-    { name: 'Add Ground Screw Base (within 75 miles of CV47)', image: image, price: 52 }
-  ]
-  const handleGroundScrewBaseOption = (option) => {
-    setSelectedGroundScrewBaseOption(option)
-    console.log('Ground Screw Base', option)
-  }
-
-  // DoorOption
-
-  const [selectedProfileOption, setSelectedProfileOption] = useState(null)
-  const ProfileOptions = [
-    { name: '17867' },
-    { name: '17869' },
-    { name: '17871' },
-    { name: '17873' },
-    { name: '17875' },
-    { name: '17877' },
-    { name: '17879' },
-    { name: '17881' },
-    { name: '17883' },
-    { name: '17885' },
-    { name: '17887' },
-    { name: '17889' },
-    { name: '17891' },
-    { name: '17893' },
-    { name: '17895' },
-    { name: '17897' },
-    { name: '17899' },
-    { name: '17901' },
-    { name: '17903' },
-    { name: '17905' },
-    { name: '17907' },
-    { name: '17909' }
-  ]
-  const handleProfileOption = (option) => {
-    setSelectedProfileOption(option)
-    dispatch({ type: 'SET_PROFILE', payload: option.name })
-    console.log('Door Option', option)
-  }
-
-  // Glazing
-
-  const [selectedGlazingOption, setSelectedGlazingOption] = useState(null)
-  const GlazingOptions = [
-    { name: 'Double Glazing', image: image, price: 52 },
-    { name: 'Triple Glazing', image: image, price: 52 }
-  ]
-  const handleGlazingOption = (option) => {
-    setSelectedGlazingOption(option)
-    console.log('Glazing', option)
-  }
+  const [OpeningTypeOptions, setOpeningTypeOptions] = useState([])
 
   // UPVC Window & Door Colour
 
@@ -169,69 +134,10 @@ export default function Configurator() {
     console.log('UPVC Window & Door Colour', option)
   }
 
-  // Window & Door Handle Colour
-
-  const [selectedWindowDoorHandleColour, setSelectedWindowDoorHandleColour] = useState(null)
-  const WindowDoorHandleColourOptions = [
-    { name: 'Black', image: image, price: 52 },
-    { name: 'Anthracite Grey', image: image, price: 52 },
-    { name: 'Gold', image: image, price: 52 },
-    { name: 'Chrome', image: image, price: 52 }
-  ]
-  const handleWindowDoorHandleColour = (option) => {
-    setSelectedWindowDoorHandleColour(option)
-    console.log('Window & Door Handle Colour', option)
-  }
-
-  // Cladding
-
-  const [selectedCladding, setSelectedCladding] = useState(null)
-  const CladdingOptions = [
-    { name: 'Shiplap Cladding all round', image: image, price: 52, color: '#ffffff' },
-    { name: 'Feather Edge to Front & Sides', image: image, price: 52, color: '#ffffff' },
-    { name: 'Vertical Cedar Cladding to Front & Sides', image: image, price: 52, color: '#ffffff' },
-    { name: 'Horizontal Cedar Cladding to Front & Sides', image: image, price: 52, color: '#ffffff' }
-  ]
-  const handleCladding = (option) => {
-    setSelectedCladding(option)
-    console.log('Cladding', option)
-  }
-
-  // Metal Box Profile Roof Colour
-
-  const [selectedMetalRoofColour, setSelectedMetalRoofColour] = useState(null)
-  const MetalRoofColourOptions = [
-    { name: 'Black Metal Roof', image: image, price: 52 },
-    { name: 'Grey Metal Roof', image: image, price: 52 }
-  ]
-  const handleMetalRoofColour = (option) => {
-    setSelectedMetalRoofColour(option)
-  }
-
-  // Rear Guttering
-
-  const [selectedGuttering, setSelectedGuttering] = useState(null)
-  const GutteringOptions = [
-    { name: 'Black Rear Guttering', image: image, price: 52 },
-    { name: 'Brown Rear Guttering', image: image, price: 52 }
-  ]
-  const handleGuttering = (option) => {
-    setSelectedGuttering(option)
-  }
-
   // Opening Type
 
   const [selectedOpeningTypeOptions, setSelectedOpeningTypeOptions] = useState(null)
-  const OpeningTypeOptions = [
-    { name: 'OPEN IN', image: image, price: 52 },
-    { name: 'OPEN OUT', image: image, price: 52 },
-    { name: 'SLIDER', image: image, price: 52 },
-    { name: 'FIXED', image: image, price: 52 },
-    { name: 'DOUBLE ACTION-LEFT OPEN', image: image, price: 52 },
-    { name: 'DOUBLE ACTION-RIGHT OPEN', image: image, price: 52 },
-    { name: 'AWNING-PUSH OUT', image: image, price: 52 },
-    { name: 'BI FOLD', image: image, price: 52 }
-  ]
+
   const handleOpeningType = (option) => {
     setSelectedOpeningTypeOptions(option)
     dispatch({ type: 'SET_OPENING_TYPE', payload: option.name })
@@ -530,24 +436,110 @@ export default function Configurator() {
                   </div>
                 </a>
               </div>
+              <hr class="border-t-2 border-gray-400 py-3"></hr>
+              <div className="rounded-2xl shadow-md border-2 border-gray-500 dark:border-gray-700 p-4">
+                <h5 className="py-1">Dimensions :</h5>
+                <div className="w-full flex gap-[12px]">
+                  <div className="flex items-center p-x-2 gap-1">
+                    <div className="h-[45px] w-[30px] bg-gray-600" style={{ position: 'relative' }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#ff0000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                        <line x1="0" y1="0" x2="20" y2="0" />
+                        <line x1="17.5" y1="-2.5" x2="20" y2="0" />
+                        <line x1="17.5" y1="2.5" x2="20" y2="0" />
+                      </svg>
+                    </div>
+                    <input
+                      type="number"
+                      className="w-[60px] h-[30px] p-y-4 border-gray-500 rounded-md border-[2px]"
+                      value={modelWidthSize}
+                      onChange={(e) => {
+                        dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: e.target.value / 1000 })
+                      }}
+                    />
+                    <div>mm</div>
+                  </div>
+                  <div className="flex items-center p-x-2 gap-1">
+                    <div className="h-[45px] w-[30px] bg-gray-600" style={{ position: 'relative' }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#ff0000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                        <line x1="0" y1="0" x2="0" y2="20" />
+                        <line x1="-2.5" y1="17.5" x2="0" y2="20" />
+                        <line x1="2.5" y1="17.5" x2="0" y2="20" />
+                      </svg>
+                    </div>
+                    <input
+                      type="number"
+                      className="w-[60px] h-[30px] p-y-4 border-gray-500 rounded-md border-[2px]"
+                      value={modelHeightSize}
+                      onChange={(e) => {
+                        dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: e.target.value / 1000 })
+                      }}
+                    />
+                    <div>mm</div>
+                  </div>
+                </div>
+              </div>
+              <h5 className="py-4">BorderOption YES/NO</h5>
+              <div>
+                <a
+                  href="#"
+                  onClick={handleBorderTrue}
+                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                    border ? '' : 'line-through'
+                  }`}>
+                  YES
+                </a>
+                <a
+                  href="#"
+                  onClick={handleBorderFalse}
+                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                    border ? 'line-through' : ''
+                  }`}>
+                  NO
+                </a>
+              </div>
             </div>
           )}
-          {currentStep === 2 && (
-            <DimensionSetting modelWidthSize={modelWidthSize} modelHeightSize={modelHeightSize} selectedItem={selectedItem} />
-          )}
+          {currentStep === 2 && <ProfileSetting />}
 
           {/* Etape 2 */}
-          {currentStep === 3 && 
-            <ProfileSetting />
-          }
+          {currentStep === 3 && (
+            <div className="p-2">
+              <h1 className=" text-xl font-bold mb-2">Opening Type</h1>
+              <div className="mb-3 py-6">
+                <div className="h-[400px] overflow-auto">
+                  <CustomSelect options={OpeningTypeOptions} onSelect={handleOpeningType} />
+                </div>
+              </div>
+            </div>
+          )}
           {currentStep === 4 && (
             <div className="p-2">
               <h1 className=" text-xl font-bold mb-2">Aluminium Colour</h1>
-              <div className="mb-3">
+              <div className="mb-3 p-4">
                 <h3 className=" font-semibold mb-1">Material</h3>
-                <CustomCard options={MaterialOptions} onSelect={handleSetMaterial} />
+                <CustomSelect options={MaterialOptions} onSelect={handleSetMaterial} />
               </div>
-              <div className="mb-3">
+              <div className="mb-3 p-4">
                 <h3 className=" font-semibold mb-1">Select Colour</h3>
                 <ColorSelect colorCodes={colors} flag="frame" />
 
@@ -571,7 +563,7 @@ export default function Configurator() {
               <h1 className=" text-xl font-bold mb-2">Opening Type</h1>
               <div className="mb-3">
                 <h3 className=" font-semibold mb-1">Opening Type</h3>
-                <CustomSelect options={OpeningTypeOptions} onSelect={handleOpeningType} />
+                <GlazingSelect />
               </div>
             </div>
           )}
@@ -709,6 +701,11 @@ export default function Configurator() {
           {/* <Viewer3d/> */}
         </div>
       </section>
+      {/* <div class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="bg-gray-300 rounded-lg shadow-lg w-96 p-6">
+          
+        </div>
+      </div> */}
     </div>
   )
 }

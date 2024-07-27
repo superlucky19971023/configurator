@@ -1,23 +1,43 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Check } from 'lucide-react'
 import { alupco } from './alupcoWindow.json'
 import { getParentByKey } from './utils'
 import { SelectedItemContext } from './SelectedItemContext'
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 
 const DisplayItem = (props) => {
   const [active, setActive] = useState(null)
   const { setSelectedItem } = useContext(SelectedItemContext)
   const [currentPage, setCurrentPage] = useState(1)
+  const [options, setOptions] = useState([])
+  const dispatch = useDispatch()
+  useEffect(() =>{
+    async function fetchData() {
+      const response = await axios.get('http://tmf.erpestman.com:2000/api/AluminumItemInsertionTypes', {
+        headers: {
+          'accept': 'text/plain'
+        }
+      });
+      console.log(response.data["$values"])
+      setOptions(response.data["$values"])
+    }
+    fetchData();
+    
+  },[])
+
 
   const itemsPerPage = 8
 
   const handleSelect = (e, index) => {
+    dispatch({ type: 'SET_MAIN_URL', payload: options[index].defaultModel3DFilePath })
     setActive(index)
     setSelectedItem(options[index])
-    document.getElementById('blyd3d-item-active').value = index
+    document.getElementById('blyd3d-item-active').value = options[index].defaultModel3DFilePath
   }
 
-  const options = getParentByKey(alupco, 'name')
+  // const options = getParentByKey(alupco, 'name')
+  // console.log( getParentByKey(alupco, 'name'))
 
   // Calculate the items to display on the current page
   const startIndex = (currentPage - 1) * itemsPerPage
@@ -46,7 +66,7 @@ const DisplayItem = (props) => {
         <div className="w-full grid gap-4 grid-cols-4 p-4 overflow-auto">
           {currentItems.map((option, index) => (
             <div
-              data-name={option.name}
+              data-name={option.insertionItemName}
               key={startIndex + index}
               className={`border-2 rounded p-3 text-xs relative hover:border-blue-800 cursor-pointer ${
                 active === startIndex + index ? 'border-blue-800' : ''
@@ -58,8 +78,8 @@ const DisplayItem = (props) => {
                   <Check className="w-4" />
                 </div>
               )}
-              {option.image && <img src={option.image} alt="" className="w-full mb-2" />}
-              <p className="mb-2 font-semibold">{option.name}</p>
+              {option.defaultModelTextureFilePath && <img src={option.defaultModelTextureFilePath} alt="" className="w-full mb-2" />}
+              <p className="mb-2 font-semibold">{option.insertionItemName}</p>
               <p>{option.price}$</p>
             </div>
           ))}

@@ -14,6 +14,7 @@ const initialState = {
     modelWidthSize:0,
     modelHeightSize:0,
     border:false,
+    currentStep:1
   };
   
   const model = (state = initialState, action) => {
@@ -48,6 +49,8 @@ const initialState = {
         return { ...state, modelHeightSize: action.payload };  
       case 'SET_BORDER':
         return { ...state, border : action.payload };  
+      case 'SET_CURRENT_STEP':
+        return { ...state, currentStep : action.payload };  
       default:
         return state;
     }

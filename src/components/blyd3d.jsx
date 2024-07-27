@@ -10,7 +10,7 @@
  * @mail nahim.salami@ahimee.com, nahim.salami@outlook.fr, marcjeoge@gmail.com
  */
 
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import * as THREE from 'three'
 import { OrbitControls, RoundedBoxGeometry, FBXLoader, GLTFLoader } from 'three/examples/jsm/Addons.js'
@@ -31,6 +31,7 @@ import {
   hideModelPart,
   hideModelBar
 } from './3dAlupcoWindows'
+import GlazingSelect from './GlazingSelect'
 
 const BLYD3D = ({ selector }) => {
   const scene = useRef(null),
@@ -41,11 +42,11 @@ const BLYD3D = ({ selector }) => {
     savedModel = useRef([]),
     canvasSelector = useRef(null),
     isInit = useRef(false),
-    mixer = useRef(null)
+    mouse = useRef(null),
+    selected = useRef(null)
 
   const animate = useCallback(() => {
     requestAnimationFrame(animate)
-    // Mettre à jour les objets et le rendu
     renderer.current.render(scene.current, camera.current)
   }, [])
 
@@ -62,9 +63,11 @@ const BLYD3D = ({ selector }) => {
     glassColor,
     glassOpacity,
     glassRoughness,
-    border
+    border,
+    modalFlag
   } = useSelector((state) => state.model)
 
+  const [mainModelPath,setMainModelPath] = useState(mainURL);
   /**
    * Initializes the basic functionality.
    */
@@ -322,15 +325,12 @@ const BLYD3D = ({ selector }) => {
   }, [glassColor, glassOpacity])
 
   const loadItemSelect = () => {
-    const item = getParentByKey(alupco, 'name')
     document.getElementById('blyd3d-display-item').addEventListener('click', function () {
       const itemId = document.getElementById('blyd3d-item-active').value
 
       removeAllObjects()
-
-      drawFixedSlideWindowGrid(item[itemId])
-
-      dispatch({ type: 'SET_MAIN_URL', payload: item[itemId].path })
+      drawFixedSlideWindowGrid(itemId)
+      // dispatch({ type: 'SET_MAIN_URL', payload: item[itemId].path })
       // console.log(item[itemId].path)
 
       document.querySelector('.blyd3d-modal-panel-item').classList.add('blyd3d-hide')
@@ -634,8 +634,8 @@ const BLYD3D = ({ selector }) => {
 
     selectObjectOnClick(grid)
 
-    dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: getObjSize(scene.current).width })
-    dispatch({ type: 'SET_MODEL_SIZE_HEIGHT', payload: getObjSize(scene.current).height })
+    dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: parseFloat(getObjSize(scene.current).width).toFixed(3) * 1000 })
+    dispatch({ type: 'SET_MODEL_SIZE_HEIGHT', payload: parseFloat(getObjSize(scene.current).height).toFixed(3) * 1000 })
     render()
   }
 
@@ -920,35 +920,40 @@ const BLYD3D = ({ selector }) => {
     function mapChild(obj) {
       obj.traverse(function (child) {
         if (child instanceof THREE.Mesh) {
-          var popup = document.getElementById('popup')
           var caption = document.getElementById('caption')
 
           child.userData.onClick = function () {
             // Restaurer la texture de l'élément précédemment cliqué
             if (lastClicked) {
               scene.current.traverse((object) => {
-                if (object.isMesh && object.name.includes(lastClicked.name) && lastClicked.name.includes('ANNO-FIXED')) {
-                  object.scale.set(1, 1, 1)
-                  popup.classList.add('hidden')
-                  // console.log(object)
-                  // object.material = lastClicked.savedMaterial
+                if (lastClicked.material.name.includes('HANDL')) {
+                  if (object.isMesh && object.material.name.includes('HANDL')) {
+                    object.material = lastClicked.material
+                  }
+                } else if (lastClicked.material.name.includes('GLZ')) {
+                  if (object.isMesh && object.material.name.includes('GLZ')) {
+                    object.material = lastClicked.material
+                  }
                 }
               })
-              // lastClicked.material = lastClicked.savedMaterial
+              lastClicked.material = lastClicked.savedMaterial
             }
-           
+
             // Stocker les informations sur l'élément actuellement cliqué
             lastClicked = child
             lastClicked.savedMaterial = child.material.clone()
 
-            // const worldPosition = new THREE.Vector3();
-            // lastClicked.getWorldPosition(worldPosition);
+            const worldPosition = new THREE.Vector3()
+            lastClicked.getWorldPosition(worldPosition)
             // console.log('World Position of Object', worldPosition);
 
             // console.log(child.name)
             // caption.id = 'myNewDiv';
             // caption.className = 'caption';
+            // console.log(child)
             caption.textContent = child.name
+            selected.current = child.name
+            caption.classList.remove('hidden')
             // document.getElementById('mainView').appendChild(caption);
 
             const vector = new THREE.Vector3()
@@ -966,22 +971,22 @@ const BLYD3D = ({ selector }) => {
             // console.log(spritey)
             // scene.current.add(spritey);
 
-            scene.current.traverse((object) => {
-              if (object.isMesh && object.name.includes(child.name) && child.name.includes('ANNO-FIXED')) {
-                object.scale.set(1.5, 1.5, 1.5)
-                popup.classList.remove('hidden')
-                const vector = new THREE.Vector3()
-                vector.setFromMatrixPosition(lastClicked.matrixWorld)
-                vector.project(camera.current)
-
-                const x = (vector.x * 0.5 + 0.5) * window.innerWidth - 100
-                const y = (vector.y * -0.5 + 0.5) * window.innerHeight
-
-                popup.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`
-                // console.log(object)
-                // object.material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0cc9ff') })
-              }
-            })
+            // scene.current.traverse((object) => {
+            //   if(lastClicked.material.name.includes("HANDL")){
+            //     if (object.isMesh && object.material.name.includes("HANDL")) {
+            //       object.material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0cc9ff') })
+            //     }
+            //   } else if(lastClicked.material.name.includes("GLZ")){
+            //     if (object.isMesh && object.material.name.includes("GLZ")) {
+            //       object.material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0cc9ff') })
+            //     }
+            //   }
+            //   // if (object.isMesh && object.material.name.includes(lastClicked.material.name)) {
+            //   //   // object.scale.set(1.1, 1.1, 1.1)
+            //   //   // console.log(object)
+            //   //   object.material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0cc9ff') })
+            //   // }
+            // })
 
             // console.log(child.name)
             // Appliquer la nouvelle texture à l'élément cliqué
@@ -1019,43 +1024,65 @@ const BLYD3D = ({ selector }) => {
         var caption = document.getElementById('caption')
         // caption.id = 'myNewDiv';
         // caption.className = 'caption';
-        caption.textContent = ''
+        caption.classList.add('hidden')
+        selected.current = null
         // document.getElementById('mainView').appendChild(caption);
       }
     }
+
+    const onMouseClick = (event) => {
+      var popup = document.getElementById('popup')
+
+      const canvasRect = canvasSelector.current.getBoundingClientRect()
+
+      const mousePosition = {
+        x: event.clientX - canvasRect.left,
+        y: event.clientY - canvasRect.top
+      }
+
+      if (selected.current) {
+        popup.classList.remove('hidden')
+        popup.style.transform = `translate(-50%, -50%) translate(${mousePosition.x}px,${mousePosition.y}px)`
+      } else {
+        popup.classList.add('hidden')
+      }
+    }
+
     window.addEventListener('resize', onWindowResize)
+    window.addEventListener('click', onMouseClick)
     canvasSelector.current.addEventListener('pointermove', handleClick)
 
     return () => {
-      canvasSelector.current.removeEventListener('click', handleClick)
+      canvasSelector.current.removeEventListener('pointermove', handleClick)
+      window.removeEventListener('click', onMouseClick)
       window.removeEventListener('resize', onWindowResize)
     }
   }
 
-  const drawFixedSlideWindowGrid = (selectedWindow = alupco.sliding['2T']['2S']) => {
-    const fixedModelPath = selectedWindow.path
-    const panelModelPath = selectedWindow.panel
-    const panelSystem = selectedWindow.panelSystem
+  const drawFixedSlideWindowGrid = (modelPath) => {
+    const fixedModelPath = modelPath
+    // const panelModelPath = selectedWindow.panel
+    // const panelSystem = selectedWindow.panelSystem
 
-    const loader = selectedWindow.type === 'glb' ? new GLTFLoader() : new FBXLoader()
+    const loader = new GLTFLoader()
 
     loader.load(fixedModelPath, function (loadModel) {
-      const model = selectedWindow.type === 'glb' ? loadModel.scene : loadModel
+      const model = loadModel.scene
       if (fixedModelPath === alupco.fixed.path) hideModelPart(model, '-DIVIDER-TSEC')
       const center = new THREE.Vector3()
       const objBoundingBox = new THREE.Box3().setFromObject(model)
       center.add(objBoundingBox.getCenter(new THREE.Vector3()))
       model.position.y = -center.y
 
-      model.panelPath = panelModelPath
-      model.panelSystem = panelSystem
+      // model.panelPath = panelModelPath
+      // model.panelSystem = panelSystem
       buildPanel(model)
 
       scene.current.add(model)
       currentObj.current.push(model)
 
-      dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: getObjSize(scene.current).width })
-      dispatch({ type: 'SET_MODEL_SIZE_HEIGHT', payload: getObjSize(scene.current).height })
+      dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: parseFloat(getObjSize(scene.current).width).toFixed(3) * 1000 })
+      dispatch({ type: 'SET_MODEL_SIZE_HEIGHT', payload: parseFloat(getObjSize(scene.current).height).toFixed(3) * 1000 })
 
       const size = objBoundingBox
       model.position.y -= size.max.y / 2
@@ -1068,6 +1095,8 @@ const BLYD3D = ({ selector }) => {
           object.visible = false
         }
       })
+
+      // calculateAndDrawSize(model)
 
       adaptOnView(model)
       render()
@@ -1227,35 +1256,49 @@ const BLYD3D = ({ selector }) => {
     // Get dimensions
     const size = new THREE.Vector3()
     box.getSize(size)
-    // Draw SVG lines
-    const svgContainer = document.getElementById('svgContainer')
-    svgContainer.innerHTML = '' // Clear previous lines
-    const svgNS = 'http://www.w3.org/2000/svg'
-    const svg = document.createElementNS(svgNS, 'svg')
-    svg.setAttribute('width', canvasSelector.current.offsetWidth)
-    svg.setAttribute('height', canvasSelector.current.offsetHeight)
-    const lines = [
-      { start: box.min.clone(), end: new THREE.Vector3(box.max.x, box.min.y, box.min.z), text: `Width: ${size.x.toFixed(3) * 1000}` },
-      { start: box.min.clone(), end: new THREE.Vector3(box.min.x, box.max.y, box.min.z), text: `Height: ${size.y.toFixed(3) * 1000}` }
-    ]
-    lines.forEach((line) => {
-      const startScreen = projectToScreen(line.start)
-      const endScreen = projectToScreen(line.end)
-      const lineElement = document.createElementNS(svgNS, 'line')
-      lineElement.setAttribute('x1', startScreen.x)
-      lineElement.setAttribute('y1', startScreen.y)
-      lineElement.setAttribute('x2', endScreen.x)
-      lineElement.setAttribute('y2', endScreen.y)
-      lineElement.setAttribute('stroke', 'red')
-      svg.appendChild(lineElement)
-      const textElement = document.createElementNS(svgNS, 'text')
-      textElement.setAttribute('x', endScreen.x)
-      textElement.setAttribute('y', endScreen.y)
-      textElement.setAttribute('fill', 'white')
-      textElement.textContent = line.text
-      svg.appendChild(textElement)
-    })
-    svgContainer.appendChild(svg)
+    // Create a line geometry for the width
+    const widthLineGeometry = new THREE.BufferGeometry()
+    widthLineGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(
+        [
+          object.position.x - object.geometry.boundingBox.max.x / 2,
+          object.position.y,
+          object.position.z,
+          object.position.x + object.geometry.boundingBox.max.x / 2,
+          object.position.y,
+          object.position.z
+        ],
+        3
+      )
+    )
+
+    // Create a line geometry for the height
+    const heightLineGeometry = new THREE.BufferGeometry()
+    heightLineGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(
+        [
+          object.position.x,
+          object.position.y - object.geometry.boundingBox.max.y / 2,
+          object.position.z,
+          object.position.x,
+          object.position.y + object.geometry.boundingBox.max.y / 2,
+          object.position.z
+        ],
+        100
+      )
+    )
+    // Create a line material
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 })
+
+    // Create the lines
+    const widthLine = new THREE.Line(widthLineGeometry, lineMaterial)
+    const heightLine = new THREE.Line(heightLineGeometry, lineMaterial)
+
+    // Add the lines to the scene
+    scene.current.add(widthLine)
+    scene.current.add(heightLine)
   }
 
   function projectToScreen(vector) {
@@ -1277,15 +1320,16 @@ const BLYD3D = ({ selector }) => {
     }
     return null // Return null if no nested object found
   }
-
+  function handleClick() {
+    dispatch({ type: 'SET_CURRENT_STEP', payload: 5 })
+  }
   return (
     <div id="mainView">
-      <div id="popup" className="flex flex-col w-52 absolute hidden">
-        <div className="p-1 border-[2px] cursor-pointer bg-gray-500">Opening Types</div>
-        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">OPEN IN</div>
-        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">OPEN OUT</div>
-        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">SLIDER</div>
-        <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">FIXED</div>
+      <div id="popup" className="bg-white-600 flex-col w-52 absolute hidden border-2">
+        <div className="ml-1 mr-1 p-3 border-[2px] cursor-pointer hover:bg-gray-300 bg-white" onClick={handleClick}>
+          Opening Types
+        </div>
+        <div className="ml-1 mr-1 p-3 border-[2px] cursor-pointer hover:bg-gray-300 bg-white">Glazing</div>
       </div>
       <div id="caption" className="caption"></div>
       <div ref={canvasSelector} />
