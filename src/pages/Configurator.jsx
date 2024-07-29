@@ -45,28 +45,6 @@ export default function Configurator() {
     border
   } = useSelector((state) => state.model)
 
-  useEffect(() => {
-    if (currentStep === 3) {
-      async function fetchData() {
-        const response = await axios.get('http://tmf.erpestman.com:2000/api/AluminumItemOpeningTypes', {
-          headers: {
-            accept: 'text/plain'
-          }
-        })
-        const options = response.data['$values'].map((obj) => {
-          const update = { ...obj }
-          update['name'] = update['aluOpeningTypeDesc']
-          update['image'] = update['openingTypeImagePath']
-          delete update['aluOpeningTypeDesc']
-          delete update['openingTypeImagePath']
-          return update
-        })
-        setOpeningTypeOptions(options)
-      }
-      fetchData()
-    }
-  }, [currentStep])
-
   const colors = [
     '#FF5733', // Vibrant Orange
     '#33FF57', // Lime Green
@@ -116,23 +94,6 @@ export default function Configurator() {
 
   const [OpeningTypeOptions, setOpeningTypeOptions] = useState([])
 
-  // UPVC Window & Door Colour
-
-  const [selectedUPVCWindowDoor, setSelectedUPVCWindowDoorOption] = useState(null)
-  const UPVCWindowDoorOptions = [
-    { name: 'Black Outside - White Inside', image: image, price: 52 },
-    { name: 'Anthracite Grey Outside - White Inside', image: image, price: 52 },
-    { name: 'White Outside - White Inside', image: image, price: 52 },
-    { name: 'Cream Outside - White Inside (Not Available on Bi-Fold Door)', image: image, price: 52 },
-    { name: 'Chartwell Green Outside - White Inside (Not Available on Bi-Fold Door)', image: image, price: 52 },
-    { name: 'Irish Oak Outside - White Inside (Not Available on Bi-Fold Door)', image: image, price: 52 },
-    { name: 'Agate Grey - White Inside (Not Available on Bi-Fold Door)', image: image, price: 52 }
-  ]
-  const handleUPVCWindowDoorOption = (option) => {
-    setSelectedUPVCWindowDoorOption(option)
-    console.log('UPVC Window & Door Colour', option)
-  }
-
   // Opening Type
 
   const [selectedOpeningTypeOptions, setSelectedOpeningTypeOptions] = useState(null)
@@ -177,16 +138,26 @@ export default function Configurator() {
     setSelectedLighting(option)
   }
 
-  // Plug Socket Type
+  // Glazing Type
 
-  const [selectedPlugSocketType, setSelectedPlugSocketType] = useState(null)
-  const PlugSocketTypeOptions = [
+  const [selectedGlazingType, setSelectedGlazingType] = useState(1)
+  const [GlazingTypeOptions, setGlazingTypeOptions] = useState([
     { name: 'Standard Faceplates', image: image, price: 52 },
     { name: 'USB Faceplates', image: image, price: 52 }
-  ]
-  const handlePlugSocketType = (option) => {
-    setSelectedPlugSocketType(option)
-    console.log('Plug Socket Type', option)
+  ])
+  const handleGlazingType = (option) => {
+    setSelectedGlazingType(option.glazingTypeId)
+  }
+
+  //Glazing Lists
+
+  const [selectedGlazingList, setSelectedGlazingList] = useState(1)
+  const [glazingOptions, setGlazingOptions] = useState([
+    { name: 'Standard Faceplates', image: image, price: 52 },
+    { name: 'USB Faceplates', image: image, price: 52 }
+  ])
+  const handleGlazingList = (option) => {
+    setSelectedGlazingList(option)
   }
 
   // Self Assembly
@@ -250,6 +221,64 @@ export default function Configurator() {
     { name: 'Shiplap Cladding', image: image, price: 52, color: '#ffffff' },
     { name: 'Feather Edge', image: image, price: 52, color: '#cccccc' }
   ]
+
+  useEffect(() => {
+    if (currentStep === 3) {
+      async function fetchData() {
+        const response = await axios.get('http://tmf.erpestman.com:2000/api/AluminumItemOpeningTypes', {
+          headers: {
+            accept: 'text/plain'
+          }
+        })
+        const options = response.data['$values'].map((obj) => {
+          const update = { ...obj }
+          update['name'] = update['aluOpeningTypeDesc']
+          update['image'] = update['openingTypeImagePath']
+          delete update['aluOpeningTypeDesc']
+          delete update['openingTypeImagePath']
+          return update
+        })
+        setOpeningTypeOptions(options)
+      }
+      fetchData()
+    } else if (currentStep === 5) {
+      async function fetchData() {
+        const response = await axios.get('http://tmf.erpestman.com:2000/api/GlazingTypes', {
+          headers: {
+            accept: 'text/plain'
+          }
+        })
+        const options = response.data['$values'].map((obj) => {
+          const update = { ...obj }
+          update['name'] = update['glazingTypeDesc']
+          delete update['glazingTypeDesc']
+          return update
+        })
+        setGlazingTypeOptions(options)
+      }
+      fetchData()
+    }
+  }, [currentStep])
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(`http://tmf.erpestman.com:2000/api/GlazingPriceLists/ByType/${selectedGlazingType}`, {
+        headers: {
+          accept: 'text/plain'
+        }
+      })
+      const options = response.data['$values'].map((obj) => {
+        const update = { ...obj }
+        update['name'] = update['glassDescription']
+        update['image'] = update['glazing2DfilePath']
+        delete update['glassDescription']
+        delete update['glazing2DfilePath']
+        return update
+      })
+      setGlazingOptions(options)
+    }
+    fetchData()
+  }, [selectedGlazingType])
 
   return (
     <div className="lg:flex-row flex flex-col-reverse h-screen">
@@ -337,20 +366,47 @@ export default function Configurator() {
           </div>
         </div>
       </div>
+
       <section className="lg:w-[480px] w-full shadow-xl flex flex-col lg:overflow-hidden overflow-auto">
-        {/* <div className="flex justify-between p-2">
-          <h1>Sales Portal Logo</h1>
-          <div>
-            <h4 className=" text-xs uppercase">Total</h4>
-            <h1 className=" font-bold text-xl">0</h1>
+        <div className="flex justify-between items-center pl-16 pr-16 pt-6">
+          <div className="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              role="img"
+              class="iconify iconify--logos"
+              width="31.88"
+              height="32"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 256 257">
+              <defs>
+                <linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%">
+                  <stop offset="0%" stop-color="#41D1FF"></stop>
+                  <stop offset="100%" stop-color="#BD34FE"></stop>
+                </linearGradient>
+                <linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%">
+                  <stop offset="0%" stop-color="#FFEA83"></stop>
+                  <stop offset="8.333%" stop-color="#FFDD35"></stop>
+                  <stop offset="100%" stop-color="#FFA800"></stop>
+                </linearGradient>
+              </defs>
+              <path
+                fill="url(#IconifyId1813088fe1fbc01fb466)"
+                d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path>
+              <path
+                fill="url(#IconifyId1813088fe1fbc01fb467)"
+                d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path>
+            </svg>
           </div>
-        </div> */}
+          <h5 className="font-semibold">Total Price</h5>
+        </div>
         <div
           className={`h-full bg-white p-5 py-8 overflow-y-auto ${
             slideDirection === 'next' ? 'slide-content-animation-next' : slideDirection === 'prev' ? 'slide-content-animation-prev' : ''
           }`}>
           {currentStep === 1 && (
-            <div className="flex flex-col absolute pt-5 pl-4">
+            <div className="flex flex-col absolute pl-4">
               <div className="w-full p-4 space-y-4">
                 <a
                   href="#"
@@ -425,7 +481,7 @@ export default function Configurator() {
                   </div>
                 </a>
               </div>
-              <hr class="border-t-2 border-gray-400 py-3"></hr>
+              <hr className="border-t-2 border-gray-400 py-3"></hr>
               <div className="rounded-2xl shadow-md border-2 border-gray-500 dark:border-gray-700 p-4">
                 <h5 className="py-1">Dimensions :</h5>
                 <div className="w-full flex gap-[12px]">
@@ -450,9 +506,9 @@ export default function Configurator() {
                     <input
                       type="number"
                       className="w-[60px] h-[30px] p-y-4 border-gray-500 rounded-md border-[2px]"
-                      value={modelWidthSize}
+                      defaultValue={modelWidthSize}
                       onChange={(e) => {
-                        dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: e.target.value / 1000 })
+                        dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: e.target.value })
                       }}
                     />
                     <div>mm</div>
@@ -478,9 +534,9 @@ export default function Configurator() {
                     <input
                       type="number"
                       className="w-[60px] h-[30px] p-y-4 border-gray-500 rounded-md border-[2px]"
-                      value={modelHeightSize}
+                      defaultValue={modelHeightSize}
                       onChange={(e) => {
-                        dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: e.target.value / 1000 })
+                        dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: e.target.value })
                       }}
                     />
                     <div>mm</div>
@@ -488,11 +544,11 @@ export default function Configurator() {
                 </div>
               </div>
               <h5 className="py-4 mt-4 font-bold">BorderOption YES/NO</h5>
-              <div classsName="mt-4">
+              <div className="mt-4">
                 <a
                   href="#"
                   onClick={handleBorderTrue}
-                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                  className={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
                     border ? '' : 'line-through'
                   }`}>
                   YES
@@ -500,7 +556,7 @@ export default function Configurator() {
                 <a
                   href="#"
                   onClick={handleBorderFalse}
-                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                  className={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
                     border ? 'line-through' : ''
                   }`}>
                   NO
@@ -512,22 +568,18 @@ export default function Configurator() {
             </div>
           )}
           {currentStep === 2 && <ProfileSetting />}
-
-          {/* Etape 2 */}
           {currentStep === 3 && (
             <div className="p-2 h-full">
               <h1 className=" text-xl font-bold mb-2">Opening Type</h1>
               <div className="mb-3 py-6">
-                <div className="h-[600px] overflow-auto">
-                  <CustomSelect options={OpeningTypeOptions} onSelect={handleOpeningType} />
-                </div>
+                <CustomSelect options={OpeningTypeOptions} onSelect={handleOpeningType} />
               </div>
               <h5 className="py-4 mt-4 font-bold">Add FlyScreen? Yes/No</h5>
               <div className="mt-4 ml-5">
                 <a
                   href="#"
                   onClick={handleBorderTrue}
-                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                  className={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
                     border ? '' : 'line-through'
                   }`}>
                   YES
@@ -535,7 +587,7 @@ export default function Configurator() {
                 <a
                   href="#"
                   onClick={handleBorderFalse}
-                  class={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
+                  className={`bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-semibold me-2 px-8 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center ${
                     border ? 'line-through' : ''
                   }`}>
                   NO
@@ -553,78 +605,25 @@ export default function Configurator() {
               <div className="mb-3 p-4">
                 <h3 className=" font-semibold mb-1">Select Colour</h3>
                 <ColorSelect colorCodes={colors} flag="frame" />
-
-                {/* <ColorPicker
-                  color={selectedCladding?.color}
-                  onChange={(color) => {
-                    console.log(color)
-                    // Update the color property of the selected cladding option
-                    dispatch({ type: 'SET_ALUMINUM_COLOR', payload: color.hex })
-                    setSelectedCladding((prevOption) => ({
-                      ...prevOption,
-                      color: color.hex
-                    }))
-                  }}
-                /> */}
               </div>
             </div>
           )}
           {currentStep === 5 && (
             <div className="p-2">
-              <h1 className=" text-xl font-bold mb-2">Opening Type</h1>
-              <div className="mb-3">
-                <h3 className=" font-semibold mb-1">Opening Type</h3>
-                <GlazingSelect />
-              </div>
-            </div>
-          )}
-          {currentStep === 6 && (
-            <div className="p-2">
               <h1 className=" text-xl font-bold mb-2">Glazing</h1>
               <div className=" space-y-4 flex flex-col">
                 <div className="border-[2px] p-2 rounded-md">
-                  <h3 className=" font-semibold mb-1">Glass list</h3>
-                  <p className=" text-xs mb-1">Choose spacer size in mm</p>
-                  <CustomSelect options={PlugSocketTypeOptions} onSelect={handlePlugSocketType} />
+                  <h3 className=" font-semibold mb-1">Type</h3>
+                  <CustomSelect options={GlazingTypeOptions} onSelect={handleGlazingType} />
                 </div>
-                <div className="border-[2px] p-2 rounded-md flex flex-col space-y-4">
-                  <h3 className=" font-semibold mb-1">Glass Options</h3>
-                  {/* <div className="">
-                    <p className=" text-xs mb-1">Choose roughness</p>
-                    <input
-                      className="w-full"
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.01"
-                      defaultValue="0.7"
-                      onChange={(e) => {
-                        dispatch({ type: 'SET_GLASS_ROUGHNESS', payload: e.target.value })
-                      }}
-                    />
-                  </div>
-                  <div className="">
-                    <p className=" text-xs mb-1">Choose transparency</p>
-                    <input
-                      className="w-full"
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.01"
-                      defaultValue="0.4"
-                      onChange={(e) => {
-                        dispatch({ type: 'SET_GLASS_OPACITY', payload: e.target.value })
-                      }}
-                    />
-                  </div> */}
-                  <div className="">
-                    <p className=" text-xs mb-1">Choose color</p>
-                    <ColorSelect colorCodes={colors} flag="glass" />
-                  </div>
+                <div className="border-[2px] p-2 rounded-md m-2">
+                  <h3 className=" font-semibold mb-1">Lists</h3>
+                  <CustomSelect options={glazingOptions} onSelect={handleGlazingType} />
                 </div>
               </div>
             </div>
           )}
+          {currentStep === 6 && <div className="p-2"></div>}
           {currentStep === 7 && (
             <div className="p-2">
               <h1 className=" text-xl font-bold mb-2">Accessories and Hardware</h1>
@@ -712,8 +711,8 @@ export default function Configurator() {
           {/* <Viewer3d/> */}
         </div>
       </section>
-      {/* <div class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="bg-gray-300 rounded-lg shadow-lg w-96 p-6">
+      {/* <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="bg-gray-300 rounded-lg shadow-lg w-96 p-6">
           
         </div>
       </div> */}

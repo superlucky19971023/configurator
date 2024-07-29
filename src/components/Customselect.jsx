@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 
 const CustomSelect = ({ options, onSelect, onClick = null }) => {
-  const [active, setActive] = useState(null);
+  const [active, setActive] = useState(1);
 
   const handleSelect = (index) => {
     setActive(index);

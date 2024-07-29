@@ -52,10 +52,10 @@ const ColorSelect = (props) => {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 h-52 overflow-auto">
+    <div className="grid grid-cols-2 gap-4 h-auto overflow-auto">
       {colorOptions.map((colorCode, idx) => (
         <div
-          className={`w-full h-[30px] border-[2px] shadow-sm ${idx == current ? 'border-blue-800' : ''}`}
+          className={`w-full h-[35px] border-[2px] shadow-sm ${idx == current ? 'border-blue-800' : ''}`}
           style={{ backgroundColor: colorCode.color }}
           onClick={() => handleSelectColor(idx)}>{colorCode.colorCode}</div>
       ))}

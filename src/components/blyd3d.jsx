@@ -16,6 +16,7 @@ import * as THREE from 'three'
 import { OrbitControls, RoundedBoxGeometry, FBXLoader, GLTFLoader } from 'three/examples/jsm/Addons.js'
 import { getSubdiviseSizes } from './2dGridBuilder'
 import { alupco } from './alupcoWindow.json'
+import LabelHelper from './LabelHelper.js'
 import { getParentByKey } from './utils'
 import {
   resizeObject,
@@ -1061,7 +1062,7 @@ const BLYD3D = ({ selector }) => {
     const loader = new GLTFLoader()
 
     loader.load(fixedModelPath, function (loadModel) {
-      const model = loadModel.scene
+      let model = loadModel.scene
       if (fixedModelPath === alupco.fixed.path) hideModelPart(model, '-DIVIDER-TSEC')
       const center = new THREE.Vector3()
       const objBoundingBox = new THREE.Box3().setFromObject(model)
@@ -1073,6 +1074,8 @@ const BLYD3D = ({ selector }) => {
       buildPanel(model)
 
       scene.current.add(model)
+      // let labelHelper = new LabelHelper(model, "Width", new THREE.Vector3(0, 0, 0));
+      // scene.current.add(labelHelper)
       currentObj.current.push(model)
 
       dispatch({ type: 'SET_MODEL_SIZE_WIDTH', payload: parseFloat(getObjSize(scene.current).width).toFixed(3) * 1000 })
@@ -1185,7 +1188,7 @@ const BLYD3D = ({ selector }) => {
     texture.needsUpdate = true
     var spriteMaterial = new THREE.SpriteMaterial({ map: texture })
     var sprite = new THREE.Sprite(spriteMaterial)
-    sprite.scale.set(0.5 * fontsize, 0.25 * fontsize, 0.75 * fontsize)
+    sprite.scale.set(0.2 * fontsize, 0.2 * fontsize, 0.2 * fontsize)
     return sprite
   }
 
@@ -1295,25 +1298,25 @@ const BLYD3D = ({ selector }) => {
     scene.current.add(heightLine)
   }
 
-  function projectToScreen(vector) {
-    const widthHalf = 0.5 * canvasSelector.current.offsetWidth
-    const heightHalf = 0.5 * canvasSelector.current.offsetHeight
-    // console.log(widthHalf, heightHalf)
-    const projected = vector.clone().project(camera.current)
-    return {
-      x: projected.x * widthHalf + widthHalf,
-      y: -(projected.y * heightHalf) + heightHalf
-    }
-  }
+  // function projectToScreen(vector) {
+  //   const widthHalf = 0.5 * canvasSelector.current.offsetWidth
+  //   const heightHalf = 0.5 * canvasSelector.current.offsetHeight
+  //   // console.log(widthHalf, heightHalf)
+  //   const projected = vector.clone().project(camera.current)
+  //   return {
+  //     x: projected.x * widthHalf + widthHalf,
+  //     y: -(projected.y * heightHalf) + heightHalf
+  //   }
+  // }
 
-  function extractInnerData(obj) {
-    for (const key in obj) {
-      if (typeof obj[key] === 'object') {
-        return obj[key]
-      }
-    }
-    return null // Return null if no nested object found
-  }
+  // function extractInnerData(obj) {
+  //   for (const key in obj) {
+  //     if (typeof obj[key] === 'object') {
+  //       return obj[key]
+  //     }
+  //   }
+  //   return null // Return null if no nested object found
+  // }
   function handleClick() {
     dispatch({ type: 'SET_CURRENT_STEP', payload: 5 })
   }
