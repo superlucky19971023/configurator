@@ -16,6 +16,7 @@ import DimensionSetting from '../components/DimensionSetting'
 import ProfileSetting from '../components/ProfileSetting'
 import GlazingSelect from '../components/GlazingSelect'
 import axios from 'axios'
+import FloatingToolbar from '../components/FloatingToolbar'
 
 const image = '/_0004_SLIDING-ROYAL-4-TRACK-4-PANELS-W-FIXED-TOP-W-3-TSEC.PNG.png'
 
@@ -366,29 +367,28 @@ export default function Configurator() {
           </div>
         </div>
       </div>
-
       <section className="lg:w-[480px] w-full shadow-xl flex flex-col lg:overflow-hidden overflow-auto">
         <div className="flex justify-between items-center pl-16 pr-16 pt-6">
           <div className="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
               aria-hidden="true"
               role="img"
-              class="iconify iconify--logos"
+              className="iconify iconify--logos"
               width="31.88"
               height="32"
               preserveAspectRatio="xMidYMid meet"
               viewBox="0 0 256 257">
               <defs>
                 <linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%">
-                  <stop offset="0%" stop-color="#41D1FF"></stop>
-                  <stop offset="100%" stop-color="#BD34FE"></stop>
+                  <stop offset="0%" stopColor="#41D1FF"></stop>
+                  <stop offset="100%" stopColor="#BD34FE"></stop>
                 </linearGradient>
                 <linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%">
-                  <stop offset="0%" stop-color="#FFEA83"></stop>
-                  <stop offset="8.333%" stop-color="#FFDD35"></stop>
-                  <stop offset="100%" stop-color="#FFA800"></stop>
+                  <stop offset="0%" stopColor="#FFEA83"></stop>
+                  <stop offset="8.333%" stopColor="#FFDD35"></stop>
+                  <stop offset="100%" stopColor="#FFA800"></stop>
                 </linearGradient>
               </defs>
               <path
@@ -706,16 +706,11 @@ export default function Configurator() {
         </div>
         <div className="lg:h-full h-[50vh]">
           <div id="blyd3d-canvas-container">
+            <FloatingToolbar />
             <BLYD3D selector={'#blyd3d-canvas-container'} />
           </div>
-          {/* <Viewer3d/> */}
         </div>
       </section>
-      {/* <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-gray-300 rounded-lg shadow-lg w-96 p-6">
-          
-        </div>
-      </div> */}
     </div>
   )
 }

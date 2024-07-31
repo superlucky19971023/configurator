@@ -1,4 +1,48 @@
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
+
 const ProfileSetting = () => {
+  const dispatch = useDispatch()
+  const [current, setCurrent] = useState(0)
+  const [profileOptions, setProfileOption] = useState([])
+  const [thicknessOptions, setThicknessOption] = useState([])
+  // const profile = useSelector((state) => state.model.profile)
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get('http://tmf.erpestman.com:2000/api/AluminumSystemsMasters', {
+        headers: {
+          accept: 'text/plain'
+        }
+      })
+      const options = response.data['$values']
+      setProfileOption(options)
+    }
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(
+        `http://tmf.erpestman.com:2000/api/AluminumSystemsThicknesses/BySystem/${profileOptions[current].aluSystemId}`,
+        {
+          headers: {
+            accept: 'text/plain'
+          }
+        }
+      )
+      const options = response.data['$values']
+      setThicknessOption(options)
+      console.log(options)
+    }
+    fetchData()
+  }, [current,profileOptions])
+
+  const handleProfileOption = (profile) => {
+    setCurrent(profile)
+  }
+
   return (
     <div className="p-2 space-y-4">
       <h1 className=" text-xl font-bold mb-2">Profile System</h1>
@@ -8,14 +52,11 @@ const ProfileSetting = () => {
         {/* <CustomSelect options={ProfileOptions} onSelect={handleProfileOption} /> */}
         <div className="p-1 border-[2px] cursor-pointer bg-gray-500">Designation</div>
         <div className="flex flex-col h-44 overflow-auto">
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">Lift and slide door S 9000</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">HST S 9000 all-round frame</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">Lift and slide door S 9000 design</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">HST S 9000 design all-round frame</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">Lift and slide door S 9000</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">HST S 9000 all-round frame</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">Lift and slide door S 9000 design</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">HST S 9000 design all-round frame</div>
+          {profileOptions.map((profile, idx) => (
+            <div key={idx} className="p-1 border-[2px] cursor-pointer hover:bg-gray-300" onClick={() => handleProfileOption(idx)}>
+              {profile.systemName}
+            </div>
+          ))}
         </div>
 
         <div className="py-2"></div>
@@ -24,12 +65,13 @@ const ProfileSetting = () => {
         {/* <p className="text-xs mb-1">SetProfile</p> */}
         {/* <CustomSelect options={ProfileOptions} onSelect={handleProfileOption} /> */}
         <div className="flex flex-col h-32 overflow-auto">
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">11 MM</div>
-          <div className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">8 MM</div>
+          {thicknessOptions.map((thickness, idx) => (
+            <div key={idx} className="p-1 border-[2px] cursor-pointer hover:bg-gray-300 ">{thickness.remarks}</div>
+          ))}
         </div>
 
         <div className="p-6">
-          <img src="http://tcf.erpestman.com:8080/PartsImages/Configurator/AluminumSystemTypes/ALUPCO45SYSTEM.png"></img>
+          <img src={profileOptions[current] ? profileOptions[current].aluSystem2DfilePath : ''}></img>
         </div>
       </div>
     </div>

@@ -80,7 +80,7 @@ const BLYD3D = ({ selector }) => {
     scene.current.background = new THREE.Color(0xa0a0a0)
     scene.current.fog = new THREE.Fog(0xa0a0a0, 10, 50)
     const environmentTexture = new THREE.CubeTextureLoader()
-      .setPath('https://sbcode.net/img/')
+      .setPath('../../backgrounds/inside/')
       .load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'])
     scene.current.environment = environmentTexture
     scene.current.background = environmentTexture
@@ -287,8 +287,12 @@ const BLYD3D = ({ selector }) => {
       if (object.isMesh && object.material.name.includes('HANDL')) {
         // Load the GLB model
         const loader = new GLTFLoader()
+        loader.setCrossOrigin('anonymous');
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const targetUrl = handleURL;
+        const finalUrl = proxyUrl + targetUrl;
         loader.load(
-          handleURL,
+          finalUrl,
           function (gltf) {
             object.geometry = gltf.scene.children[0].geometry
             object.material = gltf.scene.children[0].material
@@ -643,6 +647,7 @@ const BLYD3D = ({ selector }) => {
     const panelSystem = obj.panelSystem
     const panelModelPath = obj.panelPath
     const loader = alupco.panel.type === 'glb' ? new GLTFLoader() : new FBXLoader()
+    loader.setCrossOrigin('anonymous');
 
     return new Promise((resolve, reject) => {
       try {
@@ -754,7 +759,10 @@ const BLYD3D = ({ selector }) => {
         }
 
         if (typeof savedModel.current[panelSystem] === 'undefined') {
-          loader.load(panelModelPath, loadModelCallback, undefined, (error) => {
+          const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+          const targetUrl = panelModelPath;
+          const finalUrl = proxyUrl + targetUrl;
+          loader.load(finalUrl, loadModelCallback, undefined, (error) => {
             console.error('Erreur lors du chargement du modèle :', error)
             reject(error)
           })
@@ -780,7 +788,11 @@ const BLYD3D = ({ selector }) => {
   const drawFixedWindowGrid = (columns = 2, rows = 1, width = null, height = null, sizes = { width: [], height: [] }) => {
     const fixedModelPath = alupco.fixed.path
     const loader = alupco.fixed.type === 'glb' ? new GLTFLoader() : new FBXLoader() // Assurez-vous d'utiliser le bon préfixe pour FBXLoader
-    loader.load(fixedModelPath, function (loadmodel) {
+    loader.setCrossOrigin('anonymous');
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = fixedModelPath;
+    const finalUrl = proxyUrl + targetUrl;
+    loader.load(finalUrl, function (loadmodel) {
       const model = alupco.fixed.type === 'glb' ? loadmodel.scene.clone() : loadmodel.clone()
 
       const defaultSize = getObjSize(model) // Récuprer les dimensions par défaut de l'objet fbx chargé
@@ -1060,10 +1072,13 @@ const BLYD3D = ({ selector }) => {
     // const panelSystem = selectedWindow.panelSystem
 
     const loader = new GLTFLoader()
-
-    loader.load(fixedModelPath, function (loadModel) {
+    loader.setCrossOrigin('anonymous');
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = modelPath;
+    const finalUrl = proxyUrl + targetUrl;
+    loader.load(finalUrl, function (loadModel) {
       let model = loadModel.scene
-      if (fixedModelPath === alupco.fixed.path) hideModelPart(model, '-DIVIDER-TSEC')
+      if (finalUrl === alupco.fixed.path) hideModelPart(model, '-DIVIDER-TSEC')
       const center = new THREE.Vector3()
       const objBoundingBox = new THREE.Box3().setFromObject(model)
       center.add(objBoundingBox.getCenter(new THREE.Vector3()))
@@ -1116,7 +1131,11 @@ const BLYD3D = ({ selector }) => {
     const ext = getFileExtension(filePath)
     return new Promise((resolve, reject) => {
       const loader = ext === 'glb' || ext === 'gltf' ? new GLTFLoader() : new FBXLoader()
-      loader.load(filePath, resolve, undefined, reject)
+      loader.setCrossOrigin('anonymous');
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const targetUrl = filePath;
+      const finalUrl = proxyUrl + targetUrl;
+      loader.load(finalUrl, resolve, undefined, reject)
     })
   }
 

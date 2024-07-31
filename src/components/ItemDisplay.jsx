@@ -82,7 +82,7 @@ const DisplayItem = (props) => {
   return (
     <div className="p-4">
       {isLoading ? ( // Show the Loader component if loading state is true
-        <div role="status" className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2">
+        <div role="status" className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2 z-50">
           <svg
             aria-hidden="true"
             className="w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -105,7 +105,7 @@ const DisplayItem = (props) => {
       )}
       <div className="text-center text-[24px] font-bold">Product List</div>
       <input type="hidden" name="" id="blyd3d-item-active" />
-      <div className="flex flex-col justify-around">
+      <div className={`flex flex-col justify-around ${isLoading?'opacity-20':''}`}>
         <div className="w-full grid gap-4 grid-cols-4 p-4 overflow-auto">
           {currentItems.map((option, index) => (
             <div
